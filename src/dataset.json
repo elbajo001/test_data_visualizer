@@ -1,0 +1,66 @@
+{
+  "ventas_por_region": [
+    {
+      "region": "América del Norte",
+      "ventas": 100000
+    },
+    {
+      "region": "América del Sur",
+      "ventas": 50000
+    },
+    {
+      "region": "Europa",
+      "ventas": 200000
+    },
+    {
+      "region": "Asia",
+      "ventas": 300000
+    },
+    {
+      "region": "África",
+      "ventas": 10000
+    }
+  ],
+  "usuarios_registrados_por_mes": [
+    {
+      "mes": "Enero",
+      "usuarios_registrados": 10000
+    },
+    {
+      "mes": "Febrero",
+      "usuarios_registrados": 20000
+    },
+    {
+      "mes": "Marzo",
+      "usuarios_registrados": 30000
+    },
+    {
+      "mes": "Abril",
+      "usuarios_registrados": 40000
+    },
+    {
+      "mes": "Mayo",
+      "usuarios_registrados": 50000
+    },
+    {
+      "mes": "Junio",
+      "usuarios_registrados": 60000
+    },
+    {
+      "mes": "Julio",
+      "usuarios_registrados": 70000
+    },
+    {
+      "mes": "Agosto",
+      "usuarios_registrados": 80000
+    },
+    {
+      "mes": "Septiembre",
+      "usuarios_registrados": 90000
+    },
+    {
+      "mes": "Octubre",
+      "usuarios_registrados": 100000
+    }
+  ]
+}
