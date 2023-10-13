@@ -108,11 +108,9 @@ const App = () => {
           formData={formData}
           startDate={startDate}
           endDate={endDate}
-          showDatePicker={showDatePicker}
           setStates={setStates}
           handleChangeInput={handleChangeInput}
           onChangeDateRange={onChangeDateRange}
-          setShowDatePicker={setShowDatePicker}
           hasEmptyFields={hasEmptyFields}
           handleFetchData={handleFetchData}
         />
