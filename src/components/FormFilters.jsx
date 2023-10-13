@@ -48,7 +48,7 @@ const FormFilters = (props) => {
 
   return (
     <div>
-      <div className="flex flex-row justify-between align-middle">
+      <div className="flex flex-row justify-between transition-all">
         <p className="my-0 font-semibold text-lg">Filtros</p>
         <i
           className="bi bi-caret-down-fill flex justify-center items-center cursor-pointer"
@@ -121,7 +121,7 @@ const FormFilters = (props) => {
                   ? "opacity-50"
                   : "hover:bg-teal-400 hover:shadow-md"
               } 
-              btn ms-auto mt-3 md:mt-0 flex justify-end py-2 px-6 bg-teal-500  text-white rounded-md font-semibold tracking-wide shadow-black
+              btn ms-auto mt-3 md:mt-0 flex justify-end py-2 px-6 bg-teal-500  text-white rounded-md font-semibold tracking-wide shadow-black transition-all
             `}
             onClick={() => {
               if (!props?.states?.fetchingData) props?.handleFetchData();
