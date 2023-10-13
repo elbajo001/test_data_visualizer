@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -90,26 +90,28 @@ const FormFilters = (props) => {
               )}
               onChange={(e) => props?.handleChangeInput("typeData", e)}
             />
-            <div className="flex flex-col">
-              <label className="my-0 text-md">
-                Seleccione un rango de fechas
-              </label>
-              <DatePicker
-                onChange={(e) => props?.onChangeDateRange(e)}
-                startDate={props?.startDate}
-                endDate={props?.endDate}
-                disabled={true}
-                selectsRange
-                customInput={<CustomDatePicker />}
-                dateFormat="MM/yyyy"
-                showMonthDropdown
-                showYearDropdown
-                open={props?.showDatePicker}
-                onClickOutside={() => props?.setShowDatePicker(false)}
-                onInputClick={() => props?.setShowDatePicker(true)}
-                maxDate={new Date()}
-              />
-            </div>
+            {false ?
+              <div className="flex flex-col">
+                <label className="my-0 text-md">
+                  Seleccione un rango de fechas
+                </label>
+                <DatePicker
+                  onChange={(e) => props?.onChangeDateRange(e)}
+                  startDate={props?.startDate}
+                  endDate={props?.endDate}
+                  disabled={true}
+                  selectsRange
+                  customInput={<CustomDatePicker />}
+                  dateFormat="MM/yyyy"
+                  showMonthDropdown
+                  showYearDropdown
+                  open={props?.showDatePicker}
+                  onClickOutside={() => props?.setShowDatePicker(false)}
+                  onInputClick={() => props?.setShowDatePicker(true)}
+                  maxDate={new Date()}
+                />
+              </div>
+            : null }
           </div>
           <button
             type="button"

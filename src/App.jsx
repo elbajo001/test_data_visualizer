@@ -123,7 +123,7 @@ const App = () => {
             type={formData?.typeGraphic}
             labels={formData?.data?.map(d => (d?.name))}
             values={formData?.data?.map(d => d?.value)}
-            title={typeDataToShow?.find(t => t?.value === formData?.typeData)?.label}
+            title={`${typeDataToShow?.find(t => t?.value === formData?.typeData)?.label?.toString()?.slice(0, 25)}...`}
           />
         </div>
       :
@@ -131,7 +131,9 @@ const App = () => {
         <div className="w-full h-full flex justify-center items-center py-60">
           <div className='spinner'></div>
         </div>
-        : null 
+        : !formData?.data ? 
+          <p className="text-center my-48 text-xl">Oops! No hay datos para mostrar.</p>
+          : null
       }
     </div>
   );
