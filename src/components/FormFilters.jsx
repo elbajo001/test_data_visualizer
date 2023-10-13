@@ -91,13 +91,14 @@ const FormFilters = (props) => {
               onChange={(e) => props?.handleChangeInput("typeData", e)}
             />
             <div className="flex flex-col">
-              <label className="my-0 text-sm">
+              <label className="my-0 text-md">
                 Seleccione un rango de fechas
               </label>
               <DatePicker
                 onChange={(e) => props?.onChangeDateRange(e)}
                 startDate={props?.startDate}
                 endDate={props?.endDate}
+                disabled={true}
                 selectsRange
                 customInput={<CustomDatePicker />}
                 dateFormat="MM/yyyy"

@@ -3,7 +3,7 @@ import Select from 'react-select'
 const InputSelect = (props) => {
   return (
     <div className={`container-input ${props?.className ?? ''}`}>
-      <label htmlFor={props?.id} className="my-0 mb-1 text-sm">
+      <label htmlFor={props?.id} className="my-0 mb-1 text-md">
         {props?.label ?? ''} <span>{props?.required ? '*' : ''}</span>
       </label>
       <Select

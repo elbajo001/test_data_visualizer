@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-
 import "react-datepicker/dist/react-datepicker.css";
 
 import data from './dataset.json';
 import FormFilters from "./components/FormFilters.jsx";
+import ChartGraphic from "./components/ChartGraphic";
 
 const App = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -11,7 +11,7 @@ const App = () => {
   const [endDate, setEndDate] = useState(null);
   const [states, setStates] = useState({
     fetchingData: false,
-    showFilters: true,
+    showFilters: true
   });
   const [formData, setFormData] = useState({
     typeGraphic: "",
@@ -22,8 +22,8 @@ const App = () => {
   });
 
   const typeGraphics = [
-    { value: "bars", label: "Gráfico de barras" },
-    { value: "lines", label: "Gráfico de líneas" },
+    { value: "bar", label: "Gráfico de barras" },
+    { value: "line", label: "Gráfico de líneas" },
     { value: "pie", label: "Gráfico de torta" },
   ];
 
@@ -31,16 +31,12 @@ const App = () => {
     { value: "ventas_por_region", label: "Datos de ventas por región" },
     { value: "usuarios_registrados_por_mes", label: "Datos de usuarios registrados por mes" },
     {
-      value: "2",
+      value: "tiempo_de_carga_de_la_pagina_por_dispositivo",
       label: "Datos de tiempo de carga de la página por dispositivo",
     },
-    { value: "3", label: "Datos de satisfacción del cliente por canal" },
-    { value: "3", label: "Datos de rendimiento de las campañas de marketing" },
+    { value: "satisfaccion_del_cliente_por_canal", label: "Datos de satisfacción del cliente por canal" },
+    { value: "rendimiento_de_las_campañas_de_marketing", label: "Datos de rendimiento de las campañas de marketing" },
   ];
-
-  useEffect(() => {
-    console.log("formData", formData);
-  }, [formData]);
 
   /**
    * @INFO Método para capturar los campos del formulario
@@ -50,6 +46,7 @@ const App = () => {
   const handleChangeInput = (type, value) => {
     setFormData({
       ...formData,
+      data: [],
       [`${type}`]: value?.value,
     });
   };
@@ -62,6 +59,7 @@ const App = () => {
     const [start, end] = dates;
     setFormData({
       ...formData,
+      data: [],
       start,
       end,
     });
@@ -88,21 +86,21 @@ const App = () => {
    */
   const handleFetchData = async () => {
     setStates({ ...states, fetchingData: true });
+    setFormData({ ...formData, data: [] })
     setTimeout(() => {
-      console.log(data)
       setFormData({ ...formData, data: data[`${formData?.typeData}`] })
-      setStates({ ...states, fetchingData: false, showFilters: false });
-    }, 2000);
+      setStates({ ...states, fetchingData: false, showFilters: true });
+    }, 1000);
   };
 
   return (
-    <div className="container-app md:container md:mx-auto p-2 md:p-4">
+    <div className="container-app md:container md:mx-auto max-h-screen p-2 md:p-4">
       <div className="mx-auto mb-1 lg:mb-2 w-full rounded-lg bg-white p-4 text-[0.8125rem] leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
         <h1 className="my-0 text-xl uppercase font-extrabold">
           Datos estadísticos
         </h1>
       </div>
-      <div className="mx-auto mb-1 lg:mb-2 w-full rounded-lg bg-white p-4 text-[0.8125rem] leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
+      <div className="mx-auto mb-1 lg:mb-2 w-full rounded-lg bg-white p-4 leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
         <FormFilters
           states={states}
           typeGraphics={typeGraphics}
@@ -119,7 +117,22 @@ const App = () => {
           handleFetchData={handleFetchData}
         />
       </div>
-      <div className="mx-auto w-full rounded-lg bg-white p-4 text-[0.8125rem] leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50"></div>
+      {formData?.data !== undefined && formData?.data?.length ?
+        <div className="mx-auto w-full rounded-lg max-h-full bg-white p-4 text-[0.8125rem] leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
+          <ChartGraphic
+            type={formData?.typeGraphic}
+            labels={formData?.data?.map(d => (d?.name))}
+            values={formData?.data?.map(d => d?.value)}
+            title={typeDataToShow?.find(t => t?.value === formData?.typeData)?.label}
+          />
+        </div>
+      :
+        states?.fetchingData ?
+        <div className="w-full h-full flex justify-center items-center py-60">
+          <div className='spinner'></div>
+        </div>
+        : null 
+      }
     </div>
   );
 };

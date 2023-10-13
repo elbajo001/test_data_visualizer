@@ -1,66 +1,102 @@
 {
   "ventas_por_region": [
     {
-      "region": "América del Norte",
-      "ventas": 100000
+      "name": "América del Norte",
+      "value": 100000
     },
     {
-      "region": "América del Sur",
-      "ventas": 50000
+      "name": "América del Sur",
+      "value": 50000
     },
     {
-      "region": "Europa",
-      "ventas": 200000
+      "name": "Europa",
+      "value": 200000
     },
     {
-      "region": "Asia",
-      "ventas": 300000
+      "name": "Asia",
+      "value": 300000
     },
     {
-      "region": "África",
-      "ventas": 10000
+      "name": "África",
+      "value": 10000
     }
   ],
   "usuarios_registrados_por_mes": [
     {
-      "mes": "Enero",
-      "usuarios_registrados": 10000
+      "name": "Enero",
+      "value": 10000
     },
     {
-      "mes": "Febrero",
-      "usuarios_registrados": 20000
+      "name": "Febrero",
+      "value": 20000
     },
     {
-      "mes": "Marzo",
-      "usuarios_registrados": 30000
+      "name": "Marzo",
+      "value": 30000
     },
     {
-      "mes": "Abril",
-      "usuarios_registrados": 40000
+      "name": "Abril",
+      "value": 40000
     },
     {
-      "mes": "Mayo",
-      "usuarios_registrados": 50000
+      "name": "Mayo",
+      "value": 50000
     },
     {
-      "mes": "Junio",
-      "usuarios_registrados": 60000
+      "name": "Junio",
+      "value": 60000
     },
     {
-      "mes": "Julio",
-      "usuarios_registrados": 70000
+      "name": "Julio",
+      "value": 70000
     },
     {
-      "mes": "Agosto",
-      "usuarios_registrados": 80000
+      "name": "Agosto",
+      "value": 80000
     },
     {
-      "mes": "Septiembre",
-      "usuarios_registrados": 90000
+      "name": "Septiembre",
+      "value": 90000
     },
     {
-      "mes": "Octubre",
-      "usuarios_registrados": 100000
+      "name": "Octubre",
+      "value": 100000
+    },
+    {
+      "name": "Noviembre",
+      "value": 10000
+    },
+    {
+      "name": "Diciembre",
+      "value": 120000
+    }
+  ],
+  "tiempo_de_carga_de_la_pagina_por_dispositivo": [
+    {
+      "name": "Computadora de escritorio",
+      "value": 2
+    },
+    {
+      "name": "Teléfono inteligente",
+      "value": 3
+    },
+    {
+      "name": "Tableta",
+      "value": 2.5
+    }
+  ],
+  "satisfaccion_del_cliente_por_canal": [
+    {
+      "name": "Teléfono",
+      "value": 4
+    },
+    {
+      "name": "Correo electrónico",
+      "value": 3.5
+    },
+    {
+      "name": "Chat en vivo",
+      "value": 4.5
     }
   ]
 }
