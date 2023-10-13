@@ -8,6 +8,7 @@ const ChartGraphic = (props) => {
 
   useEffect(() => {
     handleChart(props);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props]);
 
   const handleChart = async (data) => {

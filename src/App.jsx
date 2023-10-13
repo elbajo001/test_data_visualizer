@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 
 import data from './dataset.json';
@@ -6,7 +6,6 @@ import FormFilters from "./components/FormFilters.jsx";
 import ChartGraphic from "./components/ChartGraphic";
 
 const App = () => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [states, setStates] = useState({
