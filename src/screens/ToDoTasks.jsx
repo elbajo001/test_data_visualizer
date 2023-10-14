@@ -1,16 +1,19 @@
 import React, { useState } from "react";
+import Modal from "../components/Modal";
 
 const ToDoTasks = (props) => {
   const [tasks, setTasks] = useState({
     tasks: [],
     random: "",
   });
+  const [filter, setFilter] = useState("all");
+  const [showModal, setShowModal] = useState(true);
   const [formData, setFormData] = useState({
     done: false,
     isEdit: false,
     title: "",
     titleEdit: "",
-  });  
+  });
 
   const handleSubmit = (event) => {
     event?.preventDefault();
@@ -37,13 +40,6 @@ const ToDoTasks = (props) => {
         isEdit: false,
       };
       setTasks({ tasks: newTasks, random: Math.random() });
-      /* setTasks({ ...tasks, tasks: [...tasks?.tasks, formData] });
-      setFormData({
-        done: false,
-        isEdit: false,
-        title: "",
-        titleEdit: ""
-      }); */
     }
   };
 
@@ -84,6 +80,23 @@ const ToDoTasks = (props) => {
     }
   };
 
+  const handleChangeInput = (value) => {
+    value = value?.replace(/\s+/g, " ");
+    if (value === " ") return;
+    setFormData({ ...formData, title: value });
+  };
+
+  const tasksFiltered = (tasks, tab) => {
+    switch (tab) {
+      case "done":
+        return tasks?.filter((t) => t?.done);
+      case "pending":
+        return tasks?.filter((t) => !t?.done);
+      default:
+        return tasks;
+    }
+  };
+
   return (
     <div className="container-todo-tasks">
       <div className="mx-auto mb-1 lg:mb-2 w-full rounded-lg bg-white p-4 flex justify-between items-center leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
@@ -108,12 +121,12 @@ const ToDoTasks = (props) => {
               type="text"
               name="title"
               id="title"
+              required
               placeholder="Título de la tarea"
+              maxLength={"255"}
               className="outline-none ring-2 rounded-md py-2 px-4 ring-zinc-100 w-full"
               value={formData?.title ?? undefined}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e?.target?.value })
-              }
+              onChange={(e) => handleChangeInput(e?.target?.value)}
             />
             <button
               type="submit"
@@ -127,8 +140,37 @@ const ToDoTasks = (props) => {
       {tasks?.tasks?.length ? (
         <div className="mx-auto mb-1 lg:mb-2 w-full rounded-lg bg-white p-4 leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
           <h4 className="font-semibold text-xl mb-2">Tus tareas</h4>
-          <div className="container_list-tasks">
-            {tasks?.tasks?.map((t, index) => (
+          <div className="mb-2 flex gap-2 px-4 z-10">
+            <div
+              onClick={() => setFilter("all")}
+              className={`
+                  ${filter === "all" ? "bg-gray-800" : "bg-gray-300 hover:bg-gray-500"}
+                  py-2 px-4 font-semibold flex justify-center cursor-pointer rounded-md items-center text-white transition-all
+                `}
+            >
+              Todas
+            </div>
+            <div
+              onClick={() => setFilter("done")}
+              className={`
+                  ${filter === "done" ? "bg-gray-800" : "bg-gray-300 hover:bg-gray-500"}
+                  py-2 px-4 font-semibold flex justify-center cursor-pointer rounded-md items-center text-white transition-all
+                `}
+            >
+              Completadas
+            </div>
+            <div
+              onClick={() => setFilter("pending")}
+              className={`
+                  ${filter === "pending" ? "bg-gray-800" : "bg-gray-300 hover:bg-gray-500"}
+                  py-2 px-4 font-semibold flex justify-center cursor-pointer rounded-md items-center text-white transition-all
+                `}
+            >
+              Pendientes
+            </div>
+          </div>
+          <div className="container_list-tasks ring-1 p-1 pt-4 lg:px-4 rounded-md ring-gray-200 mt-[-0.750rem] -z-10 block">
+            {tasksFiltered(tasks?.tasks, filter)?.map((t, index) => (
               <div
                 className="item-task flex gap-2 mb-2 justify-between items-center"
                 key={index}
@@ -147,6 +189,12 @@ const ToDoTasks = (props) => {
                     name=""
                     id=""
                     disabled={t?.isEdit}
+                    defaultChecked={
+                      tasks?.tasks?.find(
+                        (task) =>
+                          task?.title?.toLowerCase() === t?.title?.toLowerCase()
+                      )?.open
+                    }
                     checked={
                       tasks?.tasks?.find(
                         (task) =>
@@ -166,8 +214,10 @@ const ToDoTasks = (props) => {
                       type="text"
                       name="titleEdit"
                       id="titleEdit"
+                      required
                       placeholder="Título de la tarea"
                       className="outline-none w-full"
+                      maxLength={"255"}
                       value={formData?.titleEdit}
                       onChange={(e) =>
                         setFormData({
@@ -181,16 +231,26 @@ const ToDoTasks = (props) => {
                 <div className="flex justify-between items-center h-full">
                   <div
                     onClick={() => handleChangeTask(index, t?.title, "edit")}
-                    className="p-2 transition-all hover:bg-yellow-300 w-full h-full cursor-pointer rounded-md"
+                    className={`
+                      ${t?.isEdit ? "bg-yellow-300" : ""}
+                      p-2 transition-all hover:bg-yellow-300 w-full h-full cursor-pointer rounded-md`}
                   >
-                    <i
-                      className={`bi ${!t?.isEdit ? "bi-pen" : "bi-pen-fill"}`}
-                    ></i>
+                    {t?.isEdit ? (
+                      <span>Cancelar</span>
+                    ) : (
+                      <i className={`bi bi-pen`}></i>
+                    )}
                   </div>
                   {!t?.isEdit ? (
                     <div
                       onClick={() =>
-                        handleChangeTask(index, t?.title, "delete")
+                        setShowModal({
+                          show: true,
+                          index: index,
+                          title: t?.title,
+                          type: "delete"
+                        })
+                        // handleChangeTask(index, t?.title, "delete")
                       }
                       className="p-2 transition-all hover:bg-red-300 w-full h-full cursor-pointer rounded-md"
                     >
@@ -203,6 +263,14 @@ const ToDoTasks = (props) => {
           </div>
         </div>
       ) : null}
+      {showModal?.show ?
+        <Modal
+          setShowModal={setShowModal}
+          handleDelete={() =>
+            handleChangeTask(showModal?.index, showModal?.title, showModal?.type)
+          }
+        />
+      : null }
     </div>
   );
 };
