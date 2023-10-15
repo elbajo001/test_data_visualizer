@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../components/Modal";
 import FormTasks from "../components/FormTasks";
 import ListTasks from "../components/ListTasks";
@@ -39,6 +39,10 @@ const ToDoTasks = (props) => {
   });
 
   // UseEffects  
+  useEffect(() => {
+    console.log('tasks', tasks)
+  }, [tasks])
+  
 
   // Functions
   const handleSubmit = (event) => {
@@ -82,6 +86,7 @@ const ToDoTasks = (props) => {
             title: title,
             titleEdit: "",
             isEdit: false,
+            priority: newTasks[taskFound]?.priority
           };
           break;
         case "delete":
@@ -96,6 +101,7 @@ const ToDoTasks = (props) => {
             titleEdit: title,
             isEdit: !newTasks[taskFound]?.isEdit,
             index: index,
+            priority: newTasks[taskFound]?.priority
           };
           setFormData({ ...formData, index: index, titleEdit: title });
           break;

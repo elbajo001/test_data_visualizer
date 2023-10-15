@@ -20,18 +20,18 @@ import React from "react";
 ]; */
 
 const FormTasks = (props) => {
-  const getColor = (name) => {
+  const getColor = (name, border) => {
     switch (name) {
-      case 'orange':
-        return '#fdba74'
-      case 'yellow':
-        return '#fcd34d'
-      case 'red':
-        return '#fca5a5'
+      case "orange":
+        return border ? "#fdba74" : "#ffedd5";
+      case "yellow":
+        return border ? "#fcd34d" : "#fef9c3";
+      case "red":
+        return border ? "#fca5a5" : "#fee2e2";
       default:
         break;
     }
-  }
+  };
   return (
     <div className="container_form-tasks">
       <h4 className="font-semibold text-xl mb-2">Crea una tarea</h4>
@@ -48,11 +48,27 @@ const FormTasks = (props) => {
                       props?.handleChangePriority(option);
                     }}
                     style={{
-                      background: `${option?.id === props?.formData?.priority?.id ? getColor(option?.color) : `#e5e7eb`}`,
-                      border: `${option?.id === props?.formData?.priority?.id ? getColor(option?.color) : `#e5e7eb`}`
+                      background: `${
+                        option?.id === props?.formData?.priority?.id
+                          ? getColor(option?.color, false)
+                          : `#f5f5f5`
+                      }`,
+                      border: `1px solid ${
+                        option?.id === props?.formData?.priority?.id
+                          ? getColor(option?.color, true)
+                          : `#cbd5e1`
+                      }`,
                     }}
-                    className={`w-1/3 md:w-fit md:px-16 text-center ring-slate-300 text-slate-500 font-regular hover:bg-gray-200 hover:text-slate-800 rounded-md py-2 px-8 ring-1 cursor-pointer transition-all`?.toString()
-                    ?.trim()}
+                    className={`
+                      ${
+                        option?.id === props?.formData?.priority?.id
+                          ? `text-slate-800`
+                          : `text-slate-400`
+                      }
+                      w-1/3 md:w-fit md:px-16 text-center font-semibold hover:text-slate-800 rounded-md py-2 px-8 cursor-pointer transition-all
+                    `
+                      ?.toString()
+                      ?.trim()}
                   >
                     {option?.label}
                   </button>
@@ -76,10 +92,12 @@ const FormTasks = (props) => {
           />
           <button
             type="submit"
-            disabled={props?.formData?.title === ""}
+            disabled={
+              props?.formData?.title === "" || props?.formData?.priority === ""
+            }
             className={`
                 ${
-                  props?.formData?.title === ""
+                  props?.formData?.title === "" || props?.formData?.priority === ""
                     ? "cursor-not-allowed opacity-50"
                     : "pointer hover:bg-teal-400 hover:shadow-md"
                 } 
