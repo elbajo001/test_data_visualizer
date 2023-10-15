@@ -29,7 +29,7 @@ const ListTasks = (props) => {
   const TooltipOptions = (props) => {
     const { handleOnEdit, handleOnDelete } = props;
     return (
-      <div className="container_tooltip-options flex rounded-md absolute w-48 right-0 -top-3 bg-white ring-1 ring-gray-100 shadow-md flex-col">
+      <div className="container_tooltip-options flex rounded-md absolute w-48 right-0 -top-1 bg-white ring-1 ring-gray-100 shadow-md flex-col">
         <div className="options_container-item flex flex-col gap-y-2 p-2">
           <div
             onClick={handleOnEdit}
@@ -47,7 +47,7 @@ const ListTasks = (props) => {
           </div>
           <div
             onClick={() => {}}
-            className={`px-2 py-[.25rem] md:py-2 text-slate-500 hover:text-slate-900 ring-1 hover:ring-blue-400 hover:bg-blue-100 ring-white transition-all flex gap-x-2 whitespace-nowrap overflow-hidden items-center w-full h-full cursor-pointer rounded-sm`}
+            className={`cursor-not-allowed px-2 py-[.25rem] md:py-2 text-slate-500 hover:text-slate-900 ring-1 hover:ring-slate-400 hover:bg-slate-100 ring-white transition-all flex gap-x-2 whitespace-nowrap overflow-hidden items-center w-full h-full  rounded-sm`}
           >
             <i
               className={`bi bi-arrow-down-up flex items-center justify-center`}
@@ -231,39 +231,45 @@ const ListTasks = (props) => {
                   )}
                 </form>
                 <div className="flex justify-between items-center h-full">
-                  <Tooltip
-                    show={t?.openOptions}
-                    className={
-                      "transition-all group-hover:bg-slate-200 w-full h-full cursor-pointer rounded-md"
-                    }
-                    dataLabel={
-                      <TooltipOptions
-                        handleOnEdit={() => {
-                          props.setFormData({ ...props?.formData, id: t?.id });
-                          props?.handleChangeTask(
-                            index,
-                            t?.id,
-                            t?.title,
-                            "edit"
-                          );
-                        }}
-                        handleOnDelete={() =>
-                          props?.setShowModal({
-                            id: t?.id,
-                            show: true,
-                            index: index,
-                            title: t?.title,
-                            type: "delete",
-                          })
-                        }
-                      />
-                    }
-                  >
-                    <i
-                      onClick={() => handleOpenOptions(t)}
-                      className={`bi bi-three-dots m-auto px-2 py-3 flex justify-center items-center`}
-                    ></i>
-                  </Tooltip>
+                  {!t?.isEdit ?
+                    <Tooltip
+                      show={t?.openOptions}
+                      className={
+                        "transition-all group-hover:bg-slate-200 w-full h-full cursor-pointer rounded-md"
+                      }
+                      dataLabel={
+                        <TooltipOptions
+                          handleOnEdit={() => {
+                            props.setFormData({ ...props?.formData, id: t?.id });
+                            props?.handleChangeTask(
+                              index,
+                              t?.id,
+                              t?.title,
+                              "edit"
+                            );
+                          }}
+                          handleOnDelete={() =>
+                            props?.setShowModal({
+                              id: t?.id,
+                              show: true,
+                              index: index,
+                              title: t?.title,
+                              type: "delete",
+                            })
+                          }
+                        />
+                      }
+                    >
+                      <i
+                        onClick={() => handleOpenOptions(t)}
+                        className={`bi bi-three-dots m-auto px-2 py-3 flex justify-center items-center`}
+                      ></i>
+                    </Tooltip>
+                  : 
+                    <button
+                      onClick={() => props?.handleChangeTask(index, t?.id, t?.title, "edit")}
+                      className="hover:bg-slate-100 h-full py-2 px-1 rounded-md hover:ring-2 hover:ring-slate-100">Cancelar</button>
+                  }
                 </div>
               </div>
             ))

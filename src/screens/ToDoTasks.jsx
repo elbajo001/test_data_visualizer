@@ -171,6 +171,7 @@ const ToDoTasks = (props) => {
         openOptions:
           t?.id === exceptOption?.id ? !exceptOption?.openOptions : false,
       }));
+      if (!exceptOption) setTasks({ tasks: tasksAux, random: Math.random() });
       return tasksAux;
     }
     return [];
@@ -219,7 +220,12 @@ const ToDoTasks = (props) => {
       ) : null}
       {showModal?.show ? (
         <Modal
+          title={'¿Estás seguro que quieres eliminar esta tarea?'}
+          description={'No podrás deshacer este cambio'}
+          cancelBtnText={'cancelar'}
+          confirmBtnText={'eliminar'}
           setShowModal={setShowModal}
+          closeOptions={closeOptions}
           handleDelete={() =>
             handleChangeTask(
               showModal?.index,

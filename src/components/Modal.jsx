@@ -24,31 +24,33 @@ const Modal = (props) => {
                 </span>
               </button>
               <p className="my-4 text-xl font-semibold ">
-                ¿Estás seguro que quieres eliminar esta tarea?
+                {props?.title}
               </p>
               <p className="my-0">
-                No podrás deshacer este cambio
+                {props?.description}
               </p>
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end gap-2 py-2 px-6 border-t border-solid border-blueGray-200 rounded-b">
               <button
-                className="tracking-wide rounded-md text-red-500 hover:text-white hover:bg-red-500 background-transparent font-bold px-6 py-2 outline-none focus:outline-none transition-all"
+                className="tracking-wide capitalize rounded-md text-red-500 hover:text-white hover:bg-red-500 background-transparent font-bold px-6 py-2 outline-none focus:outline-none transition-all"
                 type="button"
-                onClick={() =>
+                onClick={() => {
+                  props?.closeOptions && props?.closeOptions(undefined)
                   props?.setShowModal && props?.setShowModal(false)
-                }
+                }}
               >
-                Cerrar
+                {props?.cancelBtnText}
               </button>
               <button
                 onClick={() => {
                   props?.handleDelete && props?.handleDelete()
+                  props?.closeOptions && props?.closeOptions(undefined)
                   props?.setShowModal && props?.setShowModal(false)
                 }}
-                className="btn flex justify-end py-2 px-6 bg-teal-500  text-white rounded-md font-semibold tracking-wide shadow-black pointer hover:bg-teal-400 hover:shadow-md transition-all"
+                className="btn capitalize flex justify-end py-2 px-6 bg-teal-500  text-white rounded-md font-semibold tracking-wide shadow-black pointer hover:bg-teal-400 hover:shadow-md transition-all"
               >
-                Eliminar
+                {props?.confirmBtnText}
               </button>
               {/* <button
                 className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
