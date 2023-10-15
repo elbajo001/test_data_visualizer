@@ -1,4 +1,5 @@
 import React from "react";
+import Tooltip from "../elements/Tooltip";
 
 const ListTasks = (props) => {
   const getColor = (name, border) => {
@@ -11,6 +12,70 @@ const ListTasks = (props) => {
         return border ? "#fca5a5" : "#fee2e2";
       default:
         break;
+    }
+  };
+
+  const getLabelFilter = (id) => {
+    switch (id) {
+      case "done":
+        return "completadas";
+      case "pending":
+        return "pendientes";
+      default:
+        break;
+    }
+  };
+
+  const TooltipOptions = (props) => {
+    const { handleOnEdit, handleOnDelete } = props;
+    return (
+      <div className="container_tooltip-options flex rounded-md absolute w-48 right-0 -top-3 bg-white ring-1 ring-gray-100 shadow-md flex-col">
+        <div className="options_container-item flex flex-col gap-y-2 p-2">
+          <div
+            onClick={handleOnEdit}
+            className={`px-2 py-[.25rem] md:py-2 text-slate-500 hover:text-slate-900 ring-1 hover:ring-orange-400 hover:bg-orange-100 ring-white transition-all flex gap-x-2 items-center w-full h-full cursor-pointer rounded-sm`}
+          >
+            <i className={`bi bi-pen flex items-center justify-center`}></i>{" "}
+            <span>Editar</span>
+          </div>
+          <div
+            onClick={handleOnDelete}
+            className={`px-2 py-[.25rem] md:py-2 text-slate-500 hover:text-slate-900 ring-1 hover:ring-red-400 hover:bg-red-100 ring-white transition-all flex gap-x-2 items-center w-full h-full cursor-pointer rounded-sm`}
+          >
+            <i className={`bi bi-trash flex items-center justify-center`}></i>{" "}
+            <span>Eliminar</span>
+          </div>
+          <div
+            onClick={() => {}}
+            className={`px-2 py-[.25rem] md:py-2 text-slate-500 hover:text-slate-900 ring-1 hover:ring-blue-400 hover:bg-blue-100 ring-white transition-all flex gap-x-2 whitespace-nowrap overflow-hidden items-center w-full h-full cursor-pointer rounded-sm`}
+          >
+            <i
+              className={`bi bi-arrow-down-up flex items-center justify-center`}
+            ></i>{" "}
+            <span>Cambiar prioridad</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const handleOpenOptions = (task) => {
+    const taskFound = props?.tasks?.tasks?.findIndex(
+      (t) => t?.id?.toLowerCase() === task?.id?.toLowerCase()
+    );
+    if (taskFound >= 0) {
+      let newTasks = props?.tasks?.tasks;
+      /* newTasks[taskFound] = {
+        id: newTasks[taskFound]?.id,
+        done: newTasks[taskFound]?.done,
+        title: task?.title,
+        titleEdit: "",
+        isEdit: false,
+        priority: newTasks[taskFound]?.priority,
+        openOptions: !newTasks[taskFound]?.openOptions,
+      }; */
+      newTasks = props?.closeOptions(task);
+      props?.setTasks({ tasks: newTasks, random: Math.random() });
     }
   };
 
@@ -101,107 +166,112 @@ const ListTasks = (props) => {
         </div>
       </div>
       <div className="container_list-tasks ring-2 p-1 pt-4 lg:px-4 rounded-md ring-gray-100 mt-[-0.9rem] -z-10 block">
-        {props?.tasksFiltered
-          ? props
-              ?.tasksFiltered(props?.tasks?.tasks, props?.filter, props?.orderAsc)
-              ?.map((t, index) => (
-                <div
-                  className="item-task flex gap-2 mb-2 justify-between items-center"
-                  key={index}
-                >
-                  <form
-                    onSubmit={props?.handleEdit}
-                    style={{
-                      backgroundColor: `${getColor(t?.priority?.color, false)}`,
-                      border: `1px solid ${getColor(t?.priority?.color, true)}`
-                    }}
-                    className={`
-                    ${t?.isEdit ? "ring-2 ring-zinc-100" : ""} 
+        {props?.tasksFiltered(
+          props?.tasks?.tasks,
+          props?.filter,
+          props?.orderAsc
+        )?.length ? (
+          props
+            ?.tasksFiltered(props?.tasks?.tasks, props?.filter, props?.orderAsc)
+            ?.map((t, index) => (
+              <div
+                className="item-task flex gap-2 mb-2 justify-between items-center"
+                key={index}
+              >
+                <form
+                  onSubmit={props?.handleEdit}
+                  style={{
+                    backgroundColor: `${
+                      false && !t?.isEdit
+                        ? getColor(t?.priority?.color, false)
+                        : "transparent"
+                    }`,
+                    border: `2.5px solid ${
+                      !t?.isEdit
+                        ? getColor(t?.priority?.color, true)
+                        : "#f4f4f5"
+                    }`,
+                  }}
+                  className={`
                     flex gap-2 p-2 w-full rounded-md transition-all
                   `}
-                  >
+                >
+                  <input
+                    type="checkbox"
+                    name={`task_edit_${t?.id}`}
+                    id={`task_edit_${t?.id}`}
+                    disabled={t?.isEdit}
+                    checked={t?.done}
+                    onChange={() => {
+                      props?.handleChangeTask(index, t?.id, t?.title, "check");
+                    }}
+                  />
+                  {!t?.isEdit ? (
+                    <span className={`${t?.done ? "line-through" : ""}`}>
+                      {t?.title}
+                    </span>
+                  ) : (
                     <input
-                      type="checkbox"
-                      name={`task_edit_${index}`}
-                      id={`task_edit_${index}`}
-                      disabled={t?.isEdit}
-                      defaultChecked={
-                        props?.tasks?.tasks?.find(
-                          (task) =>
-                            task?.title?.toLowerCase() ===
-                            t?.title?.toLowerCase()
-                        )?.open
+                      type="text"
+                      name="titleEdit"
+                      id="titleEdit"
+                      required
+                      autoFocus
+                      placeholder="Título de la tarea"
+                      className="outline-none w-full bg-transparent"
+                      maxLength={"255"}
+                      value={props?.formData?.titleEdit}
+                      onChange={(e) =>
+                        props?.setFormData({
+                          ...props?.formData,
+                          titleEdit: e?.target?.value,
+                        })
                       }
-                      checked={
-                        props?.tasks?.tasks?.find(
-                          (task) =>
-                            task?.title?.toLowerCase() ===
-                            t?.title?.toLowerCase()
-                        )?.open
-                      }
-                      onChange={() => {
-                        props?.handleChangeTask(index, t?.title, "check");
-                      }}
                     />
-                    {!t?.isEdit ? (
-                      <span className={`${t?.done ? "line-through" : ""}`}>
-                        {t?.title}
-                      </span>
-                    ) : (
-                      <input
-                        type="text"
-                        name="titleEdit"
-                        id="titleEdit"
-                        required
-                        placeholder="Título de la tarea"
-                        className="outline-none w-full bg-transparent"
-                        maxLength={"255"}
-                        value={props?.formData?.titleEdit}
-                        onChange={(e) =>
-                          props?.setFormData({
-                            ...props?.formData,
-                            titleEdit: e?.target?.value,
+                  )}
+                </form>
+                <div className="flex justify-between items-center h-full">
+                  <Tooltip
+                    show={t?.openOptions}
+                    className={
+                      "transition-all group-hover:bg-slate-200 w-full h-full cursor-pointer rounded-md"
+                    }
+                    dataLabel={
+                      <TooltipOptions
+                        handleOnEdit={() => {
+                          props.setFormData({ ...props?.formData, id: t?.id });
+                          props?.handleChangeTask(
+                            index,
+                            t?.id,
+                            t?.title,
+                            "edit"
+                          );
+                        }}
+                        handleOnDelete={() =>
+                          props?.setShowModal({
+                            id: t?.id,
+                            show: true,
+                            index: index,
+                            title: t?.title,
+                            type: "delete",
                           })
                         }
                       />
-                    )}
-                  </form>
-                  <div className="flex justify-between items-center h-full">
-                    <div
-                      onClick={() =>
-                        props?.handleChangeTask(index, t?.title, "edit")
-                      }
-                      className={`
-                      ${t?.isEdit ? "bg-yellow-300" : ""}
-                      p-2 transition-all hover:bg-yellow-300 w-full h-full cursor-pointer rounded-md`}
-                    >
-                      {t?.isEdit ? (
-                        <span>Cancelar</span>
-                      ) : (
-                        <i className={`bi bi-pen`}></i>
-                      )}
-                    </div>
-                    {!t?.isEdit ? (
-                      <div
-                        onClick={
-                          () =>
-                            props?.setShowModal({
-                              show: true,
-                              index: index,
-                              title: t?.title,
-                              type: "delete",
-                            })
-                          // handleChangeTask(index, t?.title, "delete")
-                        }
-                        className="p-2 transition-all hover:bg-red-300 w-full h-full cursor-pointer rounded-md"
-                      >
-                        <i className={`bi bi-trash`}></i>
-                      </div>
-                    ) : null}
-                  </div>
+                    }
+                  >
+                    <i
+                      onClick={() => handleOpenOptions(t)}
+                      className={`bi bi-three-dots m-auto px-2 py-3 flex justify-center items-center`}
+                    ></i>
+                  </Tooltip>
                 </div>
-              ))
-          : null}
+              </div>
+            ))
+        ) : (
+          <p className="w-full my-0 py-4 font-semibold text-slate-700 text-center">
+            Oops! No tienes tareas {getLabelFilter(props?.filter)}
+          </p>
+        )}
       </div>
     </div>
   );

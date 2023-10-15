@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const FormTasks = (props) => {
-  const [showForm, setShowForm] = useState(true)
+  const [showForm, setShowForm] = useState(true);
 
   const getColor = (name, border) => {
     switch (name) {
@@ -23,15 +23,13 @@ const FormTasks = (props) => {
           className="bi bi-caret-down-fill flex justify-center items-center cursor-pointer"
           style={{
             fontSize: "1.225rem",
-            transform: `${
-              showForm ? "rotateZ(180deg)" : "rotateZ(0deg)"
-            }`,
+            transform: `${showForm ? "rotateZ(180deg)" : "rotateZ(0deg)"}`,
           }}
           onClick={() => setShowForm(!showForm)}
         ></i>
       </div>
       {/* <h4 className="font-semibold text-xl mb-2">Crea una tarea</h4> */}
-      {showForm ?
+      {showForm ? (
         <form className="flex flex-col w-full" onSubmit={props?.handleSubmit}>
           <div className="w-full mt-2">
             <p className="my-0">Seleccione la prioridad *</p>
@@ -50,7 +48,7 @@ const FormTasks = (props) => {
                             ? getColor(option?.color, false)
                             : `#f5f5f5`
                         }`,
-                        border: `1px solid ${
+                        border: `2px solid ${
                           option?.id === props?.formData?.priority?.id
                             ? getColor(option?.color, true)
                             : `#cbd5e1`
@@ -104,7 +102,7 @@ const FormTasks = (props) => {
             </button>
           </div>
         </form>
-      : null }
+      ) : null}
     </div>
   );
 };
