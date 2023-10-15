@@ -90,11 +90,11 @@ const FormTasks = (props) => {
             <button
               type="submit"
               disabled={
-                props?.formData?.title === "" || props?.formData?.priority === ""
+                props?.formData?.title === "" || !props?.formData?.priority
               }
               className={`
                   ${
-                    props?.formData?.title === "" || props?.formData?.priority === ""
+                    props?.formData?.title === "" || !props?.formData?.priority
                       ? "cursor-not-allowed opacity-50"
                       : "pointer hover:bg-teal-400 hover:shadow-md"
                   } 

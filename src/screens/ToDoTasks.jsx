@@ -8,16 +8,19 @@ const priorityOptions = [
     id: "high",
     label: "Alta",
     color: "red",
+    order: "2"
   },
   {
     id: "medium",
     label: "Media",
     color: "orange",
+    order: "1"
   },
   {
     id: "low",
     label: "Baja",
     color: "yellow",
+    order: "0"
   },
 ];
 
@@ -119,16 +122,25 @@ const ToDoTasks = (props) => {
     setFormData({ ...formData, priority: value });
   };
 
-  const tasksFiltered = (tasks, tab) => {
+  const tasksFiltered = (tasks, tab, priority) => {
+    let tasksAux = [...tasks]
+    tasksAux = orderListByAsc(tasksAux, priority)
     switch (tab) {
       case "done":
-        return tasks?.filter((t) => t?.done);
+        return tasksAux?.filter((t) => t?.done);
       case "pending":
-        return tasks?.filter((t) => !t?.done);
+        return tasksAux?.filter((t) => !t?.done);
       default:
-        return tasks;
+        return tasksAux;
     }
   };
+
+  const orderListByAsc = (data, isAsc) => {
+    return data.slice().sort((a, b) => {
+      if (!isAsc) return parseInt(a.priority.order) - parseInt(b.priority.order);
+      else return parseInt(b.priority.order) - parseInt(a.priority.order);
+    });
+  }
 
   return (
     <div className="container-todo-tasks">

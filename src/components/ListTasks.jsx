@@ -103,7 +103,7 @@ const ListTasks = (props) => {
       <div className="container_list-tasks ring-2 p-1 pt-4 lg:px-4 rounded-md ring-gray-100 mt-[-0.9rem] -z-10 block">
         {props?.tasksFiltered
           ? props
-              ?.tasksFiltered(props?.tasks?.tasks, props?.filter)
+              ?.tasksFiltered(props?.tasks?.tasks, props?.filter, props?.orderAsc)
               ?.map((t, index) => (
                 <div
                   className="item-task flex gap-2 mb-2 justify-between items-center"
