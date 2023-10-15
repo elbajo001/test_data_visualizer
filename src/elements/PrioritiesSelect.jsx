@@ -1,15 +1,33 @@
 import React from "react";
 
 const PrioritiesSelect = (props) => {
+  const { keyValue, priority, dataPriority, handleChangePriority } = props
+  // console.log('props?.dataPriority', priority && priority?.toString() === dataPriority?.id?.toString())
   return (
     <button
-      key={props?.keyValue}
+      key={keyValue}
       type="button"
       onClick={() => {
-        props?.handleChangePriority(props?.dataPriority);
+        handleChangePriority(dataPriority);
       }}
-      className={`bg-gray-100 ring-slate-300 text-slate-500 font-regular hover:bg-orange-100 hover:ring-orange-300 hover:text-slate-800  container_priorities-select rounded-md py-2 px-8 ring-1 cursor-pointer transition-all w-1/3 md:w-fit md:px-16 text-center`}>
-      {props?.dataPriority?.label}
+      className={`
+        ${priority && priority?.toString() === dataPriority?.id?.toString() ? `bg-${dataPriority?.color}-400 ` : `bg-grey-100 hover:bg-${dataPriority?.color}-100 hover:ring-${dataPriority?.color}-300`}
+        ring-slate-300
+        text-slate-500
+        font-regular
+        hover:text-slate-800
+        rounded-md
+        py-2
+        px-8
+        ring-1
+        cursor-pointer
+        transition-all
+        w-1/3
+        md:w-fit
+        md:px-16
+        text-center
+      `}>
+      {dataPriority?.label}
     </button>
   );
 };
