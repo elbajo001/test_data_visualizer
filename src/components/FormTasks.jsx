@@ -1,7 +1,7 @@
 import React from "react";
 import PrioritiesSelect from "../elements/PrioritiesSelect";
 
-const priorityOptions = [
+/* const priorityOptions = [
   {
     id: "high",
     label: "Alta",
@@ -17,9 +17,26 @@ const priorityOptions = [
     label: "Baja",
     color: "yellow",
   }
-];
+]; */
 
 const FormTasks = (props) => {
+  const priorityOptions = [
+    {
+      id: "high",
+      label: "Alta",
+      color: "red",
+    },
+    {
+      id: "medium",
+      label: "Media",
+      color: "orange",
+    },
+    {
+      id: "low",
+      label: "Baja",
+      color: "yellow",
+    }
+  ];
   return (
     <div className="container_form-tasks">
       <h4 className="font-semibold text-xl mb-2">Crea una tarea</h4>
@@ -27,7 +44,7 @@ const FormTasks = (props) => {
         <div className="w-full">
           <p className="my-0">Seleccione la prioridad *</p>
           <div className="list-priorities w-full flex items-center gap-4 mt-1 mb-4">
-            {priorityOptions?.map((option, index) => (
+            {priorityOptions?.length ? priorityOptions?.map((option, index) => (
               <PrioritiesSelect
                 key={index}
                 keyValue={index}
@@ -35,7 +52,7 @@ const FormTasks = (props) => {
                 priority={props?.formData?.priority?.id}
                 dataPriority={option}
               />
-            ))}
+            )) : null }
           </div>
         </div>
 
