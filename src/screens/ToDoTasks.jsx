@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "../components/Modal";
 import FormTasks from "../components/FormTasks";
 import ListTasks from "../components/ListTasks";
@@ -38,11 +38,7 @@ const ToDoTasks = (props) => {
     priority: "",
   });
 
-  // UseEffects  
-  useEffect(() => {
-    console.log('tasks', tasks)
-  }, [tasks])
-  
+  // UseEffects
 
   // Functions
   const handleSubmit = (event) => {
@@ -86,7 +82,7 @@ const ToDoTasks = (props) => {
             title: title,
             titleEdit: "",
             isEdit: false,
-            priority: newTasks[taskFound]?.priority
+            priority: newTasks[taskFound]?.priority,
           };
           break;
         case "delete":
@@ -101,7 +97,7 @@ const ToDoTasks = (props) => {
             titleEdit: title,
             isEdit: !newTasks[taskFound]?.isEdit,
             index: index,
-            priority: newTasks[taskFound]?.priority
+            priority: newTasks[taskFound]?.priority,
           };
           setFormData({ ...formData, index: index, titleEdit: title });
           break;
@@ -120,7 +116,7 @@ const ToDoTasks = (props) => {
 
   const handleChangePriority = (value) => {
     if (value === "") return;
-    setFormData({ ...formData, priority: value})
+    setFormData({ ...formData, priority: value });
   };
 
   const tasksFiltered = (tasks, tab) => {
@@ -168,6 +164,7 @@ const ToDoTasks = (props) => {
             handleChangeTask={handleChangeTask}
             tasksFiltered={tasksFiltered}
             handleEdit={handleEdit}
+            setShowModal={setShowModal}
             setFormData={setFormData}
           />
         </div>

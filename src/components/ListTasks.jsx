@@ -109,7 +109,6 @@ const ListTasks = (props) => {
                   className="item-task flex gap-2 mb-2 justify-between items-center"
                   key={index}
                 >
-                  {console.log('t', t)}
                   <form
                     onSubmit={props?.handleEdit}
                     style={{
@@ -117,7 +116,7 @@ const ListTasks = (props) => {
                       border: `1px solid ${getColor(t?.priority?.color, true)}`
                     }}
                     className={`
-                    ${t?.isEdit ? "ring-2 ring-zinc-100 bg-transparent" : ""} 
+                    ${t?.isEdit ? "ring-2 ring-zinc-100" : ""} 
                     flex gap-2 p-2 w-full rounded-md transition-all
                   `}
                   >
@@ -155,7 +154,7 @@ const ListTasks = (props) => {
                         id="titleEdit"
                         required
                         placeholder="Título de la tarea"
-                        className="outline-none w-full"
+                        className="outline-none w-full bg-transparent"
                         maxLength={"255"}
                         value={props?.formData?.titleEdit}
                         onChange={(e) =>
