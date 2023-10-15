@@ -3,6 +3,24 @@ import Modal from "../components/Modal";
 import FormTasks from "../components/FormTasks";
 import ListTasks from "../components/ListTasks";
 
+const priorityOptions = [
+  {
+    id: "high",
+    label: "Alta",
+    color: "red",
+  },
+  {
+    id: "medium",
+    label: "Media",
+    color: "orange",
+  },
+  {
+    id: "low",
+    label: "Baja",
+    color: "yellow",
+  },
+];
+
 const ToDoTasks = (props) => {
   // UseStates
   const [tasks, setTasks] = useState({
@@ -129,6 +147,7 @@ const ToDoTasks = (props) => {
           formData={formData}
           handleChangeInput={handleChangeInput}
           handleChangePriority={handleChangePriority}
+          priorityOptions={priorityOptions}
         />
       </div>
       {tasks?.tasks?.length ? (

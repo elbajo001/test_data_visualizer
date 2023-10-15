@@ -1,5 +1,5 @@
 import React from "react";
-import PrioritiesSelect from "../elements/PrioritiesSelect";
+// import PrioritiesSelect from "../elements/PrioritiesSelect";
 
 /* const priorityOptions = [
   {
@@ -20,23 +20,18 @@ import PrioritiesSelect from "../elements/PrioritiesSelect";
 ]; */
 
 const FormTasks = (props) => {
-  const priorityOptions = [
-    {
-      id: "high",
-      label: "Alta",
-      color: "red",
-    },
-    {
-      id: "medium",
-      label: "Media",
-      color: "orange",
-    },
-    {
-      id: "low",
-      label: "Baja",
-      color: "yellow",
+  const getColor = (name) => {
+    switch (name) {
+      case 'orange':
+        return '#fdba74'
+      case 'yellow':
+        return '#fcd34d'
+      case 'red':
+        return '#fca5a5'
+      default:
+        break;
     }
-  ];
+  }
   return (
     <div className="container_form-tasks">
       <h4 className="font-semibold text-xl mb-2">Crea una tarea</h4>
@@ -44,15 +39,25 @@ const FormTasks = (props) => {
         <div className="w-full">
           <p className="my-0">Seleccione la prioridad *</p>
           <div className="list-priorities w-full flex items-center gap-4 mt-1 mb-4">
-            {priorityOptions?.length ? priorityOptions?.map((option, index) => (
-              <PrioritiesSelect
-                key={index}
-                keyValue={index}
-                handleChangePriority={props?.handleChangePriority}
-                priority={props?.formData?.priority?.id}
-                dataPriority={option}
-              />
-            )) : null }
+            {props?.priorityOptions?.length
+              ? props?.priorityOptions?.map((option, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => {
+                      props?.handleChangePriority(option);
+                    }}
+                    style={{
+                      background: `${option?.id === props?.formData?.priority?.id ? getColor(option?.color) : `#e5e7eb`}`,
+                      border: `${option?.id === props?.formData?.priority?.id ? getColor(option?.color) : `#e5e7eb`}`
+                    }}
+                    className={`w-1/3 md:w-fit md:px-16 text-center ring-slate-300 text-slate-500 font-regular hover:bg-gray-200 hover:text-slate-800 rounded-md py-2 px-8 ring-1 cursor-pointer transition-all`?.toString()
+                    ?.trim()}
+                  >
+                    {option?.label}
+                  </button>
+                ))
+              : null}
           </div>
         </div>
 
