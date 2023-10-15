@@ -4,6 +4,7 @@ const PrioritiesSelect = (props) => {
   const { keyValue, priority, dataPriority, handleChangePriority } = props
   useEffect(() => {
     console.log({ priority, ...props?.dataPriority})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props?.priority, props?.dataPriority])
   
   // console.log('props?.dataPriority', priority && priority?.toString() === dataPriority?.id?.toString())
