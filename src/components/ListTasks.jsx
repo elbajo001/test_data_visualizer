@@ -1,6 +1,19 @@
 import React from "react";
 
 const ListTasks = (props) => {
+  const getColor = (name, border) => {
+    switch (name) {
+      case "orange":
+        return border ? "#fdba74" : "#ffedd5";
+      case "yellow":
+        return border ? "#fcd34d" : "#fef9c3";
+      case "red":
+        return border ? "#fca5a5" : "#fee2e2";
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="container_list-tasks">
       <h4 className="font-semibold text-xl mb-2">Tus tareas</h4>
@@ -100,13 +113,12 @@ const ListTasks = (props) => {
                   <form
                     onSubmit={props?.handleEdit}
                     style={{
-                      backgroundColor: ``
+                      backgroundColor: `${getColor(t?.priority?.color, false)}`,
+                      border: `1px solid ${getColor(t?.priority?.color, true)}`
                     }}
                     className={`
                     ${t?.isEdit ? "ring-2 ring-zinc-100 bg-transparent" : ""} 
-                    flex gap-2 p-2 w-full rounded-md ring-1 transition-all ring-${
-                      t?.priority?.color
-                    }-300 bg-${t?.priority?.color}-50
+                    flex gap-2 p-2 w-full rounded-md transition-all
                   `}
                   >
                     <input
