@@ -27,7 +27,7 @@ const ListTasks = (props) => {
   };
 
   const TooltipOptions = (props) => {
-    const { handleOnEdit, handleOnDelete } = props;
+    const { handleOnEdit, handleOnDelete, handleOnChangePriority } = props;
     return (
       <div className="container_tooltip-options flex rounded-md absolute w-48 right-0 -top-1 bg-white ring-1 ring-gray-100 shadow-md flex-col">
         <div className="options_container-item flex flex-col gap-y-2 p-2">
@@ -46,8 +46,8 @@ const ListTasks = (props) => {
             <span>Eliminar</span>
           </div>
           <div
-            onClick={() => {}}
-            className={`cursor-not-allowed px-2 py-[.25rem] md:py-2 text-slate-500 hover:text-slate-900 ring-1 hover:ring-slate-400 hover:bg-slate-100 ring-white transition-all flex gap-x-2 whitespace-nowrap overflow-hidden items-center w-full h-full  rounded-sm`}
+            onClick={handleOnChangePriority}
+            className={`px-2 py-[.25rem] md:py-2 text-slate-500 hover:text-slate-900 ring-1 hover:ring-blue-700 hover:bg-blue-100 ring-white transition-all flex gap-x-2 whitespace-nowrap overflow-hidden cursor-pointer items-center w-full h-full  rounded-sm`}
           >
             <i
               className={`bi bi-arrow-down-up flex items-center justify-center`}
@@ -65,15 +65,6 @@ const ListTasks = (props) => {
     );
     if (taskFound >= 0) {
       let newTasks = props?.tasks?.tasks;
-      /* newTasks[taskFound] = {
-        id: newTasks[taskFound]?.id,
-        done: newTasks[taskFound]?.done,
-        title: task?.title,
-        titleEdit: "",
-        isEdit: false,
-        priority: newTasks[taskFound]?.priority,
-        openOptions: !newTasks[taskFound]?.openOptions,
-      }; */
       newTasks = props?.closeOptions(task);
       props?.setTasks({ tasks: newTasks, random: Math.random() });
     }
@@ -85,8 +76,9 @@ const ListTasks = (props) => {
       <div className="mb-2 flex gap-2 px-4 z-10">
         <div
           onClick={() => {
-            props?.setFilter("all");
-            props?.setOrderAsc(!props?.orderAsc);
+            props?.filter === "all"
+              ? props?.setOrderAsc(!props?.orderAsc)
+              : props?.setFilter("all");
           }}
           className={`
                   ${
@@ -112,8 +104,9 @@ const ListTasks = (props) => {
         </div>
         <div
           onClick={() => {
-            props?.setFilter("done");
-            props?.setOrderAsc(!props?.orderAsc);
+            props?.filter === "done"
+              ? props?.setOrderAsc(!props?.orderAsc)
+              : props?.setFilter("done");
           }}
           className={`
                   ${
@@ -139,8 +132,9 @@ const ListTasks = (props) => {
         </div>
         <div
           onClick={() => {
-            props?.setFilter("pending");
-            props?.setOrderAsc(!props?.orderAsc);
+            props?.filter === "pending"
+              ? props?.setOrderAsc(!props?.orderAsc)
+              : props?.setFilter("pending");
           }}
           className={`
                   ${
@@ -231,7 +225,7 @@ const ListTasks = (props) => {
                   )}
                 </form>
                 <div className="flex justify-between items-center h-full">
-                  {!t?.isEdit ?
+                  {!t?.isEdit ? (
                     <Tooltip
                       show={t?.openOptions}
                       className={
@@ -240,7 +234,10 @@ const ListTasks = (props) => {
                       dataLabel={
                         <TooltipOptions
                           handleOnEdit={() => {
-                            props.setFormData({ ...props?.formData, id: t?.id });
+                            props.setFormData({
+                              ...props?.formData,
+                              id: t?.id,
+                            });
                             props?.handleChangeTask(
                               index,
                               t?.id,
@@ -249,12 +246,35 @@ const ListTasks = (props) => {
                             );
                           }}
                           handleOnDelete={() =>
-                            props?.setShowModal({
-                              id: t?.id,
+                            props?.setDataModal({
+                              ...props?.dataModal,
                               show: true,
-                              index: index,
-                              title: t?.title,
-                              type: "delete",
+                              title:
+                                "¿Estás seguro que quieres eliminar esta tarea?",
+                              description: "No podrás deshacer este cambio",
+                              cancelBtnText: "cancelar",
+                              confirmBtnText: "eliminar",
+                              task: {
+                                id: t?.id,
+                                index: index,
+                                title: t?.title,
+                                type: "delete",
+                              },
+                            })
+                          }
+                          handleOnChangePriority={() =>
+                            props?.setDataModal({
+                              ...props?.dataModal,
+                              show: true,
+                              cancelBtnText: "cancelar",
+                              confirmBtnText: "Cambiar",
+                              content: <></>,
+                              task: {
+                                id: t?.id,
+                                index: index,
+                                title: t?.title,
+                                type: "priority",
+                              },
                             })
                           }
                         />
@@ -265,11 +285,16 @@ const ListTasks = (props) => {
                         className={`bi bi-three-dots m-auto px-2 py-3 flex justify-center items-center`}
                       ></i>
                     </Tooltip>
-                  : 
+                  ) : (
                     <button
-                      onClick={() => props?.handleChangeTask(index, t?.id, t?.title, "edit")}
-                      className="hover:bg-slate-100 h-full py-2 px-1 rounded-md hover:ring-2 hover:ring-slate-100">Cancelar</button>
-                  }
+                      onClick={() =>
+                        props?.handleChangeTask(index, t?.id, t?.title, "edit")
+                      }
+                      className="hover:bg-slate-100 h-full py-2 px-1 rounded-md hover:ring-2 hover:ring-slate-100"
+                    >
+                      Cancelar
+                    </button>
+                  )}
                 </div>
               </div>
             ))

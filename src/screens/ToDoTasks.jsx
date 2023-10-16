@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import Modal from "../components/Modal";
@@ -34,7 +34,7 @@ const ToDoTasks = (props) => {
     random: "",
   });
   const [filter, setFilter] = useState("all");
-  const [showModal, setShowModal] = useState(true);
+  const [dataModal, setDataModal] = useState({show: false});
   const [orderAsc, setOrderAsc] = useState(true);
   const [formData, setFormData] = useState({
     id: "",
@@ -47,16 +47,16 @@ const ToDoTasks = (props) => {
   });
 
   // UseEffects
-  /* useEffect(() => {
-    console.log('formData', formData)
-  }, [formData]) */
+  useEffect(() => {
+    console.log('dataModal', dataModal)
+  }, [dataModal])
 
   // Functions
   const handleSubmit = (event) => {
     event?.preventDefault();
     if (!formData?.title) return;
     formData.id = uuidv4();
-    setTasks({ ...tasks, tasks: [...tasks?.tasks, formData] });
+    setTasks({ ...tasks, tasks: [...closeOptions(), formData] });
     setFormData({
       id: "",
       done: false,
@@ -127,7 +127,7 @@ const ToDoTasks = (props) => {
         default:
           break;
       }
-      setTasks({ tasks: newTasks, random: Math.random() });
+      setTasks({ tasks: newTasks, random: Math.random()+0.03 });
     }
   };
 
@@ -139,6 +139,7 @@ const ToDoTasks = (props) => {
 
   const handleChangePriority = (value) => {
     if (value === "") return;
+    closeOptions()
     setFormData({ ...formData, priority: value });
   };
 
@@ -208,33 +209,33 @@ const ToDoTasks = (props) => {
             formData={formData}
             setFilter={setFilter}
             setTasks={setTasks}
+            dataModal={dataModal}
             setOrderAsc={setOrderAsc}
             handleChangeTask={handleChangeTask}
             tasksFiltered={tasksFiltered}
             handleEdit={handleEdit}
-            setShowModal={setShowModal}
+            setDataModal={setDataModal}
             setFormData={setFormData}
             closeOptions={closeOptions}
           />
         </div>
       ) : null}
-      {showModal?.show ? (
+      {dataModal?.show ? (
         <Modal
-          title={'¿Estás seguro que quieres eliminar esta tarea?'}
-          description={'No podrás deshacer este cambio'}
-          cancelBtnText={'cancelar'}
-          confirmBtnText={'eliminar'}
-          setShowModal={setShowModal}
+          dataModal={dataModal}
+          setDataModal={setDataModal}
           closeOptions={closeOptions}
           handleDelete={() =>
             handleChangeTask(
-              showModal?.index,
-              showModal?.id,
-              showModal?.title,
-              showModal?.type
+              dataModal?.task?.index,
+              dataModal?.task?.id,
+              dataModal?.task?.title,
+              dataModal?.task?.type
             )
           }
-        />
+        >
+          {dataModal?.content}
+        </Modal>
       ) : null}
     </div>
   );
