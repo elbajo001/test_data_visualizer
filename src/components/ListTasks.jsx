@@ -1,5 +1,6 @@
 import React from "react";
 import Tooltip from "../elements/Tooltip";
+import PrioritiesSelect from "../elements/PrioritiesSelect";
 
 const ListTasks = (props) => {
   const getColor = (name, border) => {
@@ -268,7 +269,13 @@ const ListTasks = (props) => {
                               show: true,
                               cancelBtnText: "cancelar",
                               confirmBtnText: "Cambiar",
-                              content: <></>,
+                              content:
+                              <PrioritiesSelect
+                                formData={props?.formData}
+                                priorityOptions={props?.priorityOptions}
+                                handleChangePriority={props?.handleChangePriority}
+                                priorityDefault={t?.priority}
+                              />,
                               task: {
                                 id: t?.id,
                                 index: index,

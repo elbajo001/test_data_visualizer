@@ -1,7 +1,6 @@
 import React from "react";
 
 const Modal = (props) => {
-  console.log(props);
   return (
     <div className="container_modal">
       <div className=" mx-2 justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -19,15 +18,13 @@ const Modal = (props) => {
                   ×
                 </span>
               </button>
-              <p className="my-4 text-xl font-semibold ">
+              <p className="my-4 text-xl font-semibold">
                 {props?.dataModal?.title ?? ""}
               </p>
               <p className="my-0">{props?.dataModal?.description ?? ""}</p>
-              {props?.children ?
-                <div className="modal_container-body">
-                  {props?.children}
-                </div>
-              : null }
+              {props?.children ? (
+                <div className="modal_container-body">{props?.children}</div>
+              ) : null}
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end gap-2 py-2 px-6 border-t border-solid border-blueGray-200 rounded-b">

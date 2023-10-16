@@ -1,26 +1,77 @@
 import React, { useEffect } from "react";
 
 const PrioritiesSelect = (props) => {
-  const { priority, dataPriority, handleChangePriority } = props
-  useEffect(() => {
-    console.log({ priority, ...props?.dataPriority})
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props?.priority, props?.dataPriority])
+  const getColor = (name, border) => {
+    console.log({border, name})
+    switch (name) {
+      case "orange":
+        return border ? "#fdba74" : "#ffedd5";
+      case "yellow":
+        return border ? "#fcd34d" : "#fef9c3";
+      case "red":
+        return border ? "#fca5a5" : "#fee2e2";
+      default:
+        break;
+    }
+  };
   
-  // console.log('props?.dataPriority', priority && priority?.toString() === dataPriority?.id?.toString())
+  useEffect(() => {
+    console.log("props priority", props);
+  }, [props]);
+
+  const handleChangeOption = (option) => {
+    props?.handleChangePriority(option)
+  }
+
+  const getIdPriority = () => {
+    let id = undefined
+    if (props?.priorityDefault?.id) {
+      id = props?.priorityDefault?.id
+    } else {
+      id = props?.formData?.priority?.id
+    }
+    return id
+  } 
+
   return (
-    <>
-      {dataPriority?.color ?
-        <button
-          type="button"
-          onClick={() => {
-            handleChangePriority(dataPriority);
-          }}
-          className={`bg-${dataPriority?.color}-200 ring-${dataPriority?.color}-300 hover:bg-${dataPriority?.color}-200 hover:ring-${dataPriority?.color}-400 ring-slate-300 text-slate-500 font-regular hover:text-slate-800 rounded-md py-2 px-8 ring-1 cursor-pointer transition-all w-full`?.toString()?.trim()}>
-          {dataPriority?.label}
-        </button>
-      : null }
-    </>
+    <div className="container_priorities-select w-full mt-2">
+      <p className="my-0">Seleccione la prioridad *</p>
+      <div className="list-priorities w-full flex items-center gap-4 mt-1 mb-4">
+        {props?.priorityOptions?.length
+          ? props?.priorityOptions?.map((option, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => handleChangeOption(option)}
+                style={{
+                  background: `${
+                    option?.id === getIdPriority()
+                      ? getColor(option?.color, false)
+                      : `#f5f5f5`
+                  }`,
+                  border: `2px solid ${
+                    option?.id === getIdPriority()
+                      ? getColor(option?.color, true)
+                      : `#cbd5e1`
+                  }`,
+                }}
+                className={`
+                        ${
+                          option?.id === getIdPriority()
+                            ? `text-slate-800`
+                            : `text-slate-400`
+                        }
+                        w-1/3 md:w-fit md:px-16 text-center font-semibold hover:text-slate-800 rounded-md py-2 px-8 cursor-pointer transition-all
+                        `
+                  ?.toString()
+                  ?.trim()}
+              >
+                {option?.label}
+              </button>
+            ))
+          : null}
+      </div>
+    </div>
   );
 };
 

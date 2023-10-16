@@ -1,20 +1,9 @@
 import React, { useState } from "react";
+import PrioritiesSelect from "../elements/PrioritiesSelect";
 
 const FormTasks = (props) => {
   const [showForm, setShowForm] = useState(true);
 
-  const getColor = (name, border) => {
-    switch (name) {
-      case "orange":
-        return border ? "#fdba74" : "#ffedd5";
-      case "yellow":
-        return border ? "#fcd34d" : "#fef9c3";
-      case "red":
-        return border ? "#fca5a5" : "#fee2e2";
-      default:
-        break;
-    }
-  };
   return (
     <div className="container_form-tasks">
       <div className="flex flex-row justify-between transition-all">
@@ -31,47 +20,11 @@ const FormTasks = (props) => {
       {/* <h4 className="font-semibold text-xl mb-2">Crea una tarea</h4> */}
       {showForm ? (
         <form className="flex flex-col w-full" onSubmit={props?.handleSubmit}>
-          <div className="w-full mt-2">
-            <p className="my-0">Seleccione la prioridad *</p>
-            <div className="list-priorities w-full flex items-center gap-4 mt-1 mb-4">
-              {props?.priorityOptions?.length
-                ? props?.priorityOptions?.map((option, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => {
-                        props?.handleChangePriority(option);
-                      }}
-                      style={{
-                        background: `${
-                          option?.id === props?.formData?.priority?.id
-                            ? getColor(option?.color, false)
-                            : `#f5f5f5`
-                        }`,
-                        border: `2px solid ${
-                          option?.id === props?.formData?.priority?.id
-                            ? getColor(option?.color, true)
-                            : `#cbd5e1`
-                        }`,
-                      }}
-                      className={`
-                        ${
-                          option?.id === props?.formData?.priority?.id
-                            ? `text-slate-800`
-                            : `text-slate-400`
-                        }
-                        w-1/3 md:w-fit md:px-16 text-center font-semibold hover:text-slate-800 rounded-md py-2 px-8 cursor-pointer transition-all
-                      `
-                        ?.toString()
-                        ?.trim()}
-                    >
-                      {option?.label}
-                    </button>
-                  ))
-                : null}
-            </div>
-          </div>
-
+          <PrioritiesSelect
+            formData={props?.formData}
+            priorityOptions={props?.priorityOptions}
+            handleChangePriority={props?.handleChangePriority}
+          />
           <label htmlFor="title">Título *</label>
           <div className="flex justify-between gap-2 mb-4 mt-1">
             <input

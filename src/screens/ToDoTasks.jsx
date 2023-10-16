@@ -217,6 +217,8 @@ const ToDoTasks = (props) => {
             setDataModal={setDataModal}
             setFormData={setFormData}
             closeOptions={closeOptions}
+            priorityOptions={priorityOptions}
+            handleChangePriority={handleChangePriority}
           />
         </div>
       ) : null}
