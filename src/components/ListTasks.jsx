@@ -37,6 +37,7 @@ const ListTasks = (props) => {
     if (priority?.priority) {
       handleChangePriority(props?.dataModal?.task, priority?.priority);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priority?.priority]);
 
   const TooltipOptions = (props) => {
