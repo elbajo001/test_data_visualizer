@@ -40,7 +40,7 @@ const Modal = (props) => {
               </button>
               <button
                 onClick={() => {
-                  props?.handleDelete && props?.handleDelete();
+                  props?.handleAction && props?.handleAction(props?.dataModal);
                   props?.setDataModal && props?.setDataModal({ show: false });
                 }}
                 className="btn capitalize flex justify-end py-2 px-6 bg-teal-500  text-white rounded-md font-semibold tracking-wide shadow-black pointer hover:bg-teal-400 hover:shadow-md transition-all"

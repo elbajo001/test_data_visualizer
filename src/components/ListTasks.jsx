@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Tooltip from "../elements/Tooltip";
 import PrioritiesSelect from "../elements/PrioritiesSelect";
 
 const ListTasks = (props) => {
+  const [priority, setPriority] = useState({
+    priority: {},
+    copyTasks: [],
+    handleAction: false,
+  });
+
   const getColor = (name, border) => {
     switch (name) {
       case "orange":
-        return border ? "#fdba74" : "#ffedd5";
+        return border ? "#f97316" : "#ffedd5";
       case "yellow":
-        return border ? "#fcd34d" : "#fef9c3";
+        return border ? "#facc15" : "#fef9c3";
       case "red":
-        return border ? "#fca5a5" : "#fee2e2";
+        return border ? "#b91c1c" : "#fee2e2";
       default:
         break;
     }
@@ -26,6 +32,12 @@ const ListTasks = (props) => {
         break;
     }
   };
+
+  useEffect(() => {
+    if (priority?.priority) {
+      handleChangePriority(props?.dataModal?.task, priority?.priority);
+    }
+  }, [priority?.priority]);
 
   const TooltipOptions = (props) => {
     const { handleOnEdit, handleOnDelete, handleOnChangePriority } = props;
@@ -68,6 +80,25 @@ const ListTasks = (props) => {
       let newTasks = props?.tasks?.tasks;
       newTasks = props?.closeOptions(task);
       props?.setTasks({ tasks: newTasks, random: Math.random() });
+    }
+  };
+
+  const handleChangePriority = (task, priority) => {
+    const taskFound = props?.tasks?.tasks?.findIndex((t) => t?.id === task?.id);
+    if (taskFound >= 0) {
+      let newTasks = props?.tasks?.tasks?.slice();
+      newTasks[taskFound] = {
+        id: task?.id,
+        done: newTasks[taskFound]?.done,
+        title: newTasks[taskFound]?.title,
+        titleEdit: newTasks[taskFound]?.title,
+        isEdit: newTasks[taskFound]?.isEdit,
+        index: newTasks[taskFound]?.index,
+        priority: priority,
+        openOptions: false,
+      };
+      setPriority({ ...priority, copyTasks: newTasks });
+      props?.setDataModal({ ...props?.dataModal, copyTasks: newTasks });
     }
   };
 
@@ -160,151 +191,202 @@ const ListTasks = (props) => {
           ) : null}
         </div>
       </div>
+      {/* {props?.tasksFiltered(
+          props?.tasks?.tasks,
+          props?.filter,
+          props?.orderAsc
+        )?.filter(t => t?.isEdit)?.length
+      ?
+        <p className="my-0 py-1 text-center px-auto">Presiona enter para guardar cambios</p>
+      : null } */}
       <div className="container_list-tasks ring-2 p-1 pt-4 lg:px-4 rounded-md ring-gray-100 mt-[-0.9rem] -z-10 block">
         {props?.tasksFiltered(
           props?.tasks?.tasks,
           props?.filter,
           props?.orderAsc
         )?.length ? (
-          props
-            ?.tasksFiltered(props?.tasks?.tasks, props?.filter, props?.orderAsc)
-            ?.map((t, index) => (
-              <div
-                className="item-task flex gap-2 mb-2 justify-between items-center"
-                key={index}
-              >
-                <form
-                  onSubmit={props?.handleEdit}
-                  style={{
-                    backgroundColor: `${
-                      false && !t?.isEdit
-                        ? getColor(t?.priority?.color, false)
-                        : "transparent"
-                    }`,
-                    border: `2.5px solid ${
-                      !t?.isEdit
-                        ? getColor(t?.priority?.color, true)
-                        : "#f4f4f5"
-                    }`,
-                  }}
-                  className={`
-                    flex gap-2 p-2 w-full rounded-md transition-all
-                  `}
+          <>
+            {props
+              ?.tasksFiltered(
+                props?.tasks?.tasks,
+                props?.filter,
+                props?.orderAsc
+              )
+              ?.filter((t) => t?.isEdit)?.length ? (
+              <p className="my-0 py-1 text-center px-auto">
+                Presiona enter para guardar cambios
+              </p>
+            ) : null}
+            {props
+              ?.tasksFiltered(
+                props?.tasks?.tasks,
+                props?.filter,
+                props?.orderAsc
+              )
+              ?.map((t, index) => (
+                <div
+                  className="item-task flex gap-2 mb-2 justify-between items-center"
+                  key={index}
                 >
-                  <input
-                    type="checkbox"
-                    name={`task_edit_${t?.id}`}
-                    id={`task_edit_${t?.id}`}
-                    disabled={t?.isEdit}
-                    checked={t?.done}
-                    onChange={() => {
-                      props?.handleChangeTask(index, t?.id, t?.title, "check");
+                  <form
+                    onSubmit={props?.handleEdit}
+                    style={{
+                      backgroundColor: `${
+                        false && !t?.isEdit
+                          ? getColor(t?.priority?.color, false)
+                          : "transparent"
+                      }`,
+                      border: `2.5px solid ${
+                        false && !t?.isEdit
+                          ? getColor(t?.priority?.color, true)
+                          : "#f2f2f2"
+                      }`,
                     }}
-                  />
-                  {!t?.isEdit ? (
-                    <span className={`${t?.done ? "line-through" : ""}`}>
-                      {t?.title}
-                    </span>
-                  ) : (
+                    className={`
+                  flex gap-2 p-2 w-full rounded-md transition-all
+                `}
+                  >
                     <input
-                      type="text"
-                      name="titleEdit"
-                      id="titleEdit"
-                      required
-                      autoFocus
-                      placeholder="Título de la tarea"
-                      className="outline-none w-full bg-transparent"
-                      maxLength={"255"}
-                      value={props?.formData?.titleEdit}
-                      onChange={(e) =>
-                        props?.setFormData({
-                          ...props?.formData,
-                          titleEdit: e?.target?.value,
-                        })
-                      }
+                      type="checkbox"
+                      name={`task_edit_${t?.id}`}
+                      id={`task_edit_${t?.id}`}
+                      disabled={t?.isEdit}
+                      checked={t?.done}
+                      onChange={() => {
+                        props?.handleChangeTask(
+                          index,
+                          t?.id,
+                          t?.title,
+                          "check"
+                        );
+                      }}
                     />
-                  )}
-                </form>
-                <div className="flex justify-between items-center h-full">
-                  {!t?.isEdit ? (
-                    <Tooltip
-                      show={t?.openOptions}
-                      className={
-                        "transition-all group-hover:bg-slate-200 w-full h-full cursor-pointer rounded-md"
-                      }
-                      dataLabel={
-                        <TooltipOptions
-                          handleOnEdit={() => {
-                            props.setFormData({
-                              ...props?.formData,
-                              id: t?.id,
-                            });
-                            props?.handleChangeTask(
-                              index,
-                              t?.id,
-                              t?.title,
-                              "edit"
-                            );
+                    {!t?.isEdit ? (
+                      <span className={`flex justify-between items-center w-full ${t?.done ? "line-through" : ""}`}>
+                        {t?.title}
+                        <div
+                          style={{
+                            backgroundColor: `${getColor(t?.priority?.color, true)}`
                           }}
-                          handleOnDelete={() =>
-                            props?.setDataModal({
-                              ...props?.dataModal,
-                              show: true,
-                              title:
-                                "¿Estás seguro que quieres eliminar esta tarea?",
-                              description: "No podrás deshacer este cambio",
-                              cancelBtnText: "cancelar",
-                              confirmBtnText: "eliminar",
-                              task: {
+                          className="rounded-md w-[12px] h-[12px] bg-red-500"
+                        ></div>
+                      </span>
+                    ) : (
+                      <input
+                        type="text"
+                        name="titleEdit"
+                        id="titleEdit"
+                        required
+                        autoFocus
+                        placeholder="Título de la tarea"
+                        className="outline-none w-full bg-transparent"
+                        maxLength={"255"}
+                        value={props?.formData?.titleEdit}
+                        onChange={(e) =>
+                          props?.setFormData({
+                            ...props?.formData,
+                            titleEdit: e?.target?.value,
+                          })
+                        }
+                      />
+                    )}
+                  </form>
+                  <div className="flex justify-between items-center h-full">
+                    {!t?.isEdit ? (
+                      <Tooltip
+                        show={t?.openOptions}
+                        className={
+                          "transition-all group-hover:bg-slate-200 w-full h-full cursor-pointer rounded-md"
+                        }
+                        dataLabel={
+                          <TooltipOptions
+                            handleOnEdit={() => {
+                              props.setFormData({
+                                ...props?.formData,
                                 id: t?.id,
-                                index: index,
-                                title: t?.title,
-                                type: "delete",
-                              },
-                            })
-                          }
-                          handleOnChangePriority={() =>
-                            props?.setDataModal({
-                              ...props?.dataModal,
-                              show: true,
-                              cancelBtnText: "cancelar",
-                              confirmBtnText: "Cambiar",
-                              content:
-                              <PrioritiesSelect
-                                formData={props?.formData}
-                                priorityOptions={props?.priorityOptions}
-                                handleChangePriority={props?.handleChangePriority}
-                                priorityDefault={t?.priority}
-                              />,
-                              task: {
-                                id: t?.id,
-                                index: index,
-                                title: t?.title,
-                                type: "priority",
-                              },
-                            })
-                          }
-                        />
-                      }
-                    >
-                      <i
-                        onClick={() => handleOpenOptions(t)}
-                        className={`bi bi-three-dots m-auto px-2 py-3 flex justify-center items-center`}
-                      ></i>
-                    </Tooltip>
-                  ) : (
-                    <button
-                      onClick={() =>
-                        props?.handleChangeTask(index, t?.id, t?.title, "edit")
-                      }
-                      className="hover:bg-slate-100 h-full py-2 px-1 rounded-md hover:ring-2 hover:ring-slate-100"
-                    >
-                      Cancelar
-                    </button>
-                  )}
+                              });
+                              props?.handleChangeTask(
+                                index,
+                                t?.id,
+                                t?.title,
+                                "edit"
+                              );
+                            }}
+                            handleOnDelete={() =>
+                              props?.setDataModal({
+                                ...props?.dataModal,
+                                show: true,
+                                title:
+                                  "¿Estás seguro que quieres eliminar esta tarea?",
+                                description: "No podrás deshacer este cambio",
+                                cancelBtnText: "cancelar",
+                                confirmBtnText: "eliminar",
+                                handleAction: () =>
+                                  props?.handleChangeTask(
+                                    index,
+                                    t?.id,
+                                    t?.title,
+                                    "delete"
+                                  ),
+                              })
+                            }
+                            handleOnChangePriority={() =>
+                              props?.setDataModal({
+                                ...props?.dataModal,
+                                show: true,
+                                cancelBtnText: "cancelar",
+                                confirmBtnText: "Cambiar",
+                                content: (
+                                  <PrioritiesSelect
+                                    formData={props?.formData}
+                                    priorityOptions={props?.priorityOptions}
+                                    handleChangePriority={(e) => {
+                                      setPriority({
+                                        priority: e,
+                                        copyTasks: priority?.copyTasks,
+                                        handleAction: false,
+                                      });
+                                    }}
+                                    priority={priority?.priority}
+                                    prioritySelected={t?.priority}
+                                  />
+                                ),
+                                task: t,
+                                handleAction: (data) => {
+                                  props?.setTasks({
+                                    tasks: data?.copyTasks,
+                                    random: Math.random(),
+                                  });
+                                  props?.launchToast(
+                                    "Prioridad editada satisfactoriamente 💪"
+                                  );
+                                  setPriority({
+                                    ...priority,
+                                    handleAction: true,
+                                  });
+                                },
+                              })
+                            }
+                          />
+                        }
+                      >
+                        <i
+                          onClick={() => handleOpenOptions(t)}
+                          className={`bi bi-three-dots m-auto px-2 py-3 flex justify-center items-center`}
+                        ></i>
+                      </Tooltip>
+                    ) : (
+                      <button
+                        onClick={() => props?.closeOptions()}
+                        className="hover:bg-slate-100 h-full py-2 px-1 rounded-md hover:ring-2 hover:ring-slate-100"
+                      >
+                        Cancelar
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))
+              ))}
+          </>
         ) : (
           <p className="w-full my-0 py-4 font-semibold text-slate-700 text-center">
             Oops! No tienes tareas {getLabelFilter(props?.filter)}

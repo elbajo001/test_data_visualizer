@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.min.css';
 
 import Modal from "../components/Modal";
 import FormTasks from "../components/FormTasks";
@@ -48,14 +51,16 @@ const ToDoTasks = (props) => {
 
   // UseEffects
   useEffect(() => {
-    console.log('dataModal', dataModal)
-  }, [dataModal])
+    const storedData = localStorage.getItem('tasks');
+    if (storedData) setTasks({ tasks: JSON.parse(storedData), random: Math.random() })
+  }, [])
 
   // Functions
   const handleSubmit = (event) => {
     event?.preventDefault();
     if (!formData?.title) return;
     formData.id = uuidv4();
+    localStorage.setItem('tasks', JSON.stringify([...closeOptions(), formData]));
     setTasks({ ...tasks, tasks: [...closeOptions(), formData] });
     setFormData({
       id: "",
@@ -70,17 +75,17 @@ const ToDoTasks = (props) => {
   const handleEdit = (event) => {
     event?.preventDefault();
     if (!formData?.titleEdit) return;
-    let taskFound = tasks?.tasks?.find(
+    let taskFound = tasks?.tasks?.findIndex(
       (t) => t?.id?.toString() === formData?.id?.toString()
     );
-    if (taskFound) {
+    if (taskFound >= 0) {
       let newTasks = tasks?.tasks;
-      newTasks[taskFound?.index] = {
-        id: taskFound?.id,
-        done: taskFound?.done,
+      newTasks[taskFound] = {
+        id: newTasks[taskFound]?.id,
+        done: newTasks[taskFound]?.done,
         title: formData?.titleEdit,
         titleEdit: "",
-        priority: taskFound?.priority,
+        priority: newTasks[taskFound]?.priority,
         isEdit: false,
         openOptions: false,
       };
@@ -219,6 +224,7 @@ const ToDoTasks = (props) => {
             closeOptions={closeOptions}
             priorityOptions={priorityOptions}
             handleChangePriority={handleChangePriority}
+            launchToast={(data) => toast(data)}
           />
         </div>
       ) : null}
@@ -227,18 +233,27 @@ const ToDoTasks = (props) => {
           dataModal={dataModal}
           setDataModal={setDataModal}
           closeOptions={closeOptions}
-          handleDelete={() =>
-            handleChangeTask(
-              dataModal?.task?.index,
-              dataModal?.task?.id,
-              dataModal?.task?.title,
-              dataModal?.task?.type
-            )
-          }
+          handleAction={dataModal?.handleAction}
         >
           {dataModal?.content}
         </Modal>
       ) : null}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        progressStyle={{
+          background: `#14b8a6`
+        }}
+        className={`text-lg`}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

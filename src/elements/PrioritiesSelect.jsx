@@ -1,8 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const PrioritiesSelect = (props) => {
+  const [priority, setPriority] = useState({})
+
+  useEffect(() => {
+    if (props?.prioritySelected) {
+      setPriority(props?.prioritySelected)
+    }
+  }, [props?.prioritySelected]);
+  
+  const handleChangeOption = (option) => {
+    props?.handleChangePriority(option)
+    setPriority(option)
+  }
+  
   const getColor = (name, border) => {
-    console.log({border, name})
     switch (name) {
       case "orange":
         return border ? "#fdba74" : "#ffedd5";
@@ -15,18 +27,10 @@ const PrioritiesSelect = (props) => {
     }
   };
   
-  useEffect(() => {
-    console.log("props priority", props);
-  }, [props]);
-
-  const handleChangeOption = (option) => {
-    props?.handleChangePriority(option)
-  }
-
   const getIdPriority = () => {
     let id = undefined
-    if (props?.priorityDefault?.id) {
-      id = props?.priorityDefault?.id
+    if (props?.prioritySelected?.id) {
+      id = priority?.id
     } else {
       id = props?.formData?.priority?.id
     }
