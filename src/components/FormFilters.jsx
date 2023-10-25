@@ -20,8 +20,14 @@ const FormFilters = (props) => {
           <p className="my-0 w-full">
             {props?.startDate || props?.endDate
               ? `${
-                  props?.startDate ? new Date(props?.startDate).toLocaleDateString() : ""
-                } a ${props?.endDate ? new Date(props?.endDate).toLocaleDateString() : ""}`
+                  props?.startDate
+                    ? new Date(props?.startDate).toLocaleDateString()
+                    : ""
+                } a ${
+                  props?.endDate
+                    ? new Date(props?.endDate).toLocaleDateString()
+                    : ""
+                }`
               : `Selecciona las fechas`}
             {/* {startDate || endDate ? (
               <i
@@ -59,13 +65,16 @@ const FormFilters = (props) => {
             }`,
           }}
           onClick={() =>
-            props?.setStates({ ...props?.states, showFilters: !props?.states?.showFilters })
+            props?.setStates({
+              ...props?.states,
+              showFilters: !props?.states?.showFilters,
+            })
           }
         ></i>
       </div>
       {props?.states?.showFilters ? (
         <>
-          <div className="container-app_container-form grid md:gap-x-4 mt-2 lg:gap-x-6 xl:gap-x-12 gap-x-0 grid-cols-1 md:grid-cols-3">
+          <div className="container-app_container-form grid md:gap-x-4 mt-2 md:mb-4 lg:gap-x-6 xl:gap-x-12 gap-x-0 grid-cols-1 md:grid-cols-3  md:flex md:flex-col">
             <InputSelect
               id={"type_graphic"}
               label={"Tipo de gráfica"}
@@ -109,15 +118,24 @@ const FormFilters = (props) => {
           </div>
           <button
             type="button"
-            disabled={props?.hasEmptyFields(props?.formData, props?.states?.fetchingData)}
+            disabled={props?.hasEmptyFields(
+              props?.formData,
+              props?.states?.fetchingData
+            )}
             className={`
               ${
-                props?.hasEmptyFields(props?.formData, props?.states?.fetchingData)
+                props?.hasEmptyFields(
+                  props?.formData,
+                  props?.states?.fetchingData
+                )
                   ? "cursor-not-allowed"
                   : "pointer"
               } 
               ${
-                props?.hasEmptyFields(props?.formData, props?.states?.fetchingData)
+                props?.hasEmptyFields(
+                  props?.formData,
+                  props?.states?.fetchingData
+                )
                   ? "opacity-50"
                   : "hover:bg-teal-400 hover:shadow-md"
               } 

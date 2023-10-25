@@ -8,12 +8,16 @@
 
 :root {
   font-size: 14px;
+  position: relative;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -28,6 +32,7 @@ body {
   max-height: 100vh;
   background-color: hsl(0, 0%, 97%);
   overflow-x: hidden;
+  z-index: 10;
 }
 
 .date-picker-custom {
@@ -39,6 +44,74 @@ body {
   height: 46px;
   border: 1px solid hsl(0, 0%, 80%);
   border-radius: 4px;
+}
+
+.background-wave {
+  position: absolute;
+  width: 100vw;
+  min-width: 900px;
+  bottom: -4rem;
+  z-index: -1;
+}
+
+.progress-bar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: 
+    radial-gradient(closest-side, white 79%, transparent 80% 100%),
+    conic-gradient(hotpink 75%, pink 0);    
+}
+
+.container_list-tasks .subcontainer_list-tasks {
+  overflow-y: auto;
+}
+
+.container_list-tasks .subcontainer_list-tasks.close-form {
+  max-height: 590px;
+}
+
+.container_list-tasks .subcontainer_list-tasks.open-form {
+  max-height: 470px;
+}
+
+@media screen and (min-width: 768px) {
+  .container_list-tasks .subcontainer_list-tasks {
+    max-height: 600px;
+  }
+}
+
+/* Personalización del scroll vertical */
+::-webkit-scrollbar {
+  width: 6px; /* Ancho del scrollbar */
+}
+::-webkit-scrollbar-thumb {
+  background: theme('colors.gray.800'); /* Color del thumb (barra de desplazamiento) */
+  border-radius: 6px; /* Radio de borde del thumb */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color del fondo del scrollbar */
+}
+
+/* Personalización del scroll horizontal (opcional) */
+::-webkit-scrollbar-thumb:horizontal {
+  background: theme('colors.gray.800');
+}
+
+::-webkit-scrollbar-track:horizontal {
+  background: #f1f1f1;
+}
+
+.background-hexa {
+  position: absolute;
+  width: 100vw;
+  min-width: 900px;
+  object-fit: cover;
+  object-position: center;
+  height: 100vh;
+  top: 0;
+  z-index: -1;
 }
 
 .spinner {

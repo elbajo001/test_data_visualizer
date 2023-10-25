@@ -43,7 +43,7 @@ const ListTasks = (props) => {
   const TooltipOptions = (props) => {
     const { handleOnEdit, handleOnDelete, handleOnChangePriority } = props;
     return (
-      <div className="container_tooltip-options flex rounded-md absolute w-48 right-0 -top-1 bg-white ring-1 ring-gray-100 shadow-md flex-col">
+      <div className="container_tooltip-options flex rounded-md absolute w-48 right-0 -top-1 bg-white ring-1 ring-gray-100 shadow-md flex-col z-50">
         <div className="options_container-item flex flex-col gap-y-2 p-2">
           <div
             onClick={handleOnEdit}
@@ -106,7 +106,7 @@ const ListTasks = (props) => {
   return (
     <div className="container_list-tasks">
       <h4 className="font-semibold text-xl mb-2">Tus tareas</h4>
-      <div className="mb-2 flex gap-2 px-4 z-10">
+      <div className="mb-2 flex gap-2 px-4 z-50 relative">
         <div
           onClick={() => {
             props?.filter === "all"
@@ -192,15 +192,12 @@ const ListTasks = (props) => {
           ) : null}
         </div>
       </div>
-      {/* {props?.tasksFiltered(
-          props?.tasks?.tasks,
-          props?.filter,
-          props?.orderAsc
-        )?.filter(t => t?.isEdit)?.length
-      ?
-        <p className="my-0 py-1 text-center px-auto">Presiona enter para guardar cambios</p>
-      : null } */}
-      <div className="container_list-tasks ring-2 p-1 pt-4 lg:px-4 rounded-md ring-gray-100 mt-[-0.9rem] -z-10 block">
+      <div
+        className={`
+          ${!props?.showForm ? 'close-form' : 'open-form'}
+          subcontainer_list-tasks ring-2 p-1 pt-4 lg:px-4 rounded-md ring-gray-100 mt-[-0.9rem] -z-50 block
+        `}
+      >
         {props?.tasksFiltered(
           props?.tasks?.tasks,
           props?.filter,
@@ -348,6 +345,7 @@ const ListTasks = (props) => {
                                         handleAction: false,
                                       });
                                     }}
+                                    isModal
                                     priority={priority?.priority}
                                     prioritySelected={t?.priority}
                                   />

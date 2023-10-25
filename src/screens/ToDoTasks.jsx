@@ -38,6 +38,7 @@ const ToDoTasks = (props) => {
   });
   const [filter, setFilter] = useState("all");
   const [dataModal, setDataModal] = useState({show: false});
+  const [showForm, setShowForm] = useState(false);
   const [orderAsc, setOrderAsc] = useState(true);
   const [formData, setFormData] = useState({
     id: "",
@@ -185,7 +186,7 @@ const ToDoTasks = (props) => {
 
   return (
     <div className="container-todo-tasks">
-      <div className="mx-auto mb-1 lg:mb-2 w-full rounded-lg bg-white p-4 flex justify-between items-center leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
+      <div className="mx-auto mb-2 lg:mb-2 w-full rounded-lg bg-white p-4 flex justify-between items-center leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
         <h1 className="my-0 text-xl uppercase font-extrabold">
           {props?.title}
         </h1>
@@ -196,38 +197,43 @@ const ToDoTasks = (props) => {
           Cambiar
         </button>
       </div>
-      <div className="mx-auto mb-1 lg:mb-2 w-full rounded-lg bg-white p-4 leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
-        <FormTasks
-          handleSubmit={handleSubmit}
-          formData={formData}
-          handleChangeInput={handleChangeInput}
-          handleChangePriority={handleChangePriority}
-          priorityOptions={priorityOptions}
-        />
-      </div>
-      {tasks?.tasks?.length ? (
-        <div className="mx-auto mb-1 lg:mb-2 w-full rounded-lg bg-white p-4 leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
-          <ListTasks
-            tasks={tasks}
-            orderAsc={orderAsc}
-            filter={filter}
+      <div className="h-full flex flex-col md:flex-row gap-1 md:gap-2">
+        <div className="mx-auto mb-1 md:h-fit md:max-w-md lg:mb-2 w-full rounded-lg bg-white p-4 leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
+          <FormTasks
+            handleSubmit={handleSubmit}
             formData={formData}
-            setFilter={setFilter}
-            setTasks={setTasks}
-            dataModal={dataModal}
-            setOrderAsc={setOrderAsc}
-            handleChangeTask={handleChangeTask}
-            tasksFiltered={tasksFiltered}
-            handleEdit={handleEdit}
-            setDataModal={setDataModal}
-            setFormData={setFormData}
-            closeOptions={closeOptions}
-            priorityOptions={priorityOptions}
+            handleChangeInput={handleChangeInput}
             handleChangePriority={handleChangePriority}
-            launchToast={(data) => toast(data)}
+            priorityOptions={priorityOptions}
+            setShowForm={setShowForm}
+            showForm={showForm}
           />
         </div>
-      ) : null}
+        {tasks?.tasks?.length ? (
+          <div className="mx-auto mb-1 lg:mb-2 w-full rounded-lg bg-white p-4 leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
+            <ListTasks
+              tasks={tasks}
+              orderAsc={orderAsc}
+              filter={filter}
+              formData={formData}
+              showForm={showForm}
+              setFilter={setFilter}
+              setTasks={setTasks}
+              dataModal={dataModal}
+              setOrderAsc={setOrderAsc}
+              handleChangeTask={handleChangeTask}
+              tasksFiltered={tasksFiltered}
+              handleEdit={handleEdit}
+              setDataModal={setDataModal}
+              setFormData={setFormData}
+              closeOptions={closeOptions}
+              priorityOptions={priorityOptions}
+              handleChangePriority={handleChangePriority}
+              launchToast={(data) => toast(data)}
+            />
+          </div>
+        ) : null}
+      </div>
       {dataModal?.show ? (
         <Modal
           dataModal={dataModal}

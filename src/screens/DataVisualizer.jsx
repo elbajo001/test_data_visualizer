@@ -4,13 +4,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import FormFilters from "../components/FormFilters";
 import ChartGraphic from "../components/ChartGraphic";
 
-
 const DataVisualizer = (props) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [states, setStates] = useState({
     fetchingData: false,
-    showFilters: true
+    showFilters: true,
   });
   const [formData, setFormData] = useState({
     typeGraphic: "",
@@ -28,13 +27,22 @@ const DataVisualizer = (props) => {
 
   const typeDataToShow = [
     { value: "ventas_por_region", label: "Datos de ventas por región" },
-    { value: "usuarios_registrados_por_mes", label: "Datos de usuarios registrados por mes" },
+    {
+      value: "usuarios_registrados_por_mes",
+      label: "Datos de usuarios registrados por mes",
+    },
     {
       value: "tiempo_de_carga_de_la_pagina_por_dispositivo",
       label: "Datos de tiempo de carga de la página por dispositivo",
     },
-    { value: "satisfaccion_del_cliente_por_canal", label: "Datos de satisfacción del cliente por canal" },
-    { value: "rendimiento_de_las_campañas_de_marketing", label: "Datos de rendimiento de las campañas de marketing" },
+    {
+      value: "satisfaccion_del_cliente_por_canal",
+      label: "Datos de satisfacción del cliente por canal",
+    },
+    {
+      value: "rendimiento_de_las_campañas_de_marketing",
+      label: "Datos de rendimiento de las campañas de marketing",
+    },
   ];
 
   /**
@@ -85,9 +93,23 @@ const DataVisualizer = (props) => {
    */
   const handleFetchData = async () => {
     setStates({ ...states, fetchingData: true });
-    setFormData({ ...formData, data: [] })
+    setFormData({ ...formData, data: [] });
+    let auxData = props?.data[`${formData?.typeData}`];
+    if (formData?.end && formData?.start) {
+      auxData = auxData?.filter((d) => {
+        if (
+          new Date(d?.date)?.toISOString() >=
+            new Date(formData?.start)?.toISOString() &&
+          new Date(d?.date)?.toISOString() <=
+            new Date(formData?.end)?.toISOString()
+        ) {
+          return true;
+        }
+        return false;
+      });
+    }
     setTimeout(() => {
-      setFormData({ ...formData, data: props?.data[`${formData?.typeData}`] })
+      setFormData({ ...formData, data: auxData });
       setStates({ ...states, fetchingData: false, showFilters: true });
     }, 850);
   };
@@ -105,42 +127,44 @@ const DataVisualizer = (props) => {
           Cambiar
         </button>
       </div>
-      <div className="mx-auto mb-1 lg:mb-2 w-full rounded-lg bg-white p-4 leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
-        <FormFilters
-          states={states}
-          typeGraphics={typeGraphics}
-          typeDataToShow={typeDataToShow}
-          formData={formData}
-          startDate={startDate}
-          endDate={endDate}
-          setStates={setStates}
-          handleChangeInput={handleChangeInput}
-          onChangeDateRange={onChangeDateRange}
-          hasEmptyFields={hasEmptyFields}
-          handleFetchData={handleFetchData}
-        />
-      </div>
-      {formData?.data !== undefined && formData?.data?.length ? (
-        <div className="mx-auto w-full rounded-lg max-h-full bg-white p-4 text-[0.8125rem] leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
-          <ChartGraphic
-            type={formData?.typeGraphic}
-            labels={formData?.data?.map((d) => d?.name)}
-            values={formData?.data?.map((d) => d?.value)}
-            title={`${typeDataToShow
-              ?.find((t) => t?.value === formData?.typeData)
-              ?.label?.toString()
-              ?.slice(0, 25)}...`}
+      <div className="h-full flex flex-col md:flex-row gap-1 md:gap-2">
+        <div className="mx-auto mb-1 md:h-fit md:max-w-md lg:mb-2 w-full rounded-lg bg-white p-4 leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
+          <FormFilters
+            states={states}
+            typeGraphics={typeGraphics}
+            typeDataToShow={typeDataToShow}
+            formData={formData}
+            startDate={startDate}
+            endDate={endDate}
+            setStates={setStates}
+            handleChangeInput={handleChangeInput}
+            onChangeDateRange={onChangeDateRange}
+            hasEmptyFields={hasEmptyFields}
+            handleFetchData={handleFetchData}
           />
         </div>
-      ) : states?.fetchingData ? (
-        <div className="w-full h-full flex justify-center items-center py-60">
-          <div className="spinner"></div>
-        </div>
-      ) : !formData?.data ? (
-        <p className="text-center my-48 text-xl">
-          Oops! No hay datos para mostrar.
-        </p>
-      ) : null}
+        {formData?.data !== undefined && formData?.data?.length ? (
+          <div className="mx-auto w-full rounded-lg max-h-full bg-white p-4 text-[0.8125rem] leading-5 shadow-xl shadow-black/5 ring-2 ring-indigo-50">
+            <ChartGraphic
+              type={formData?.typeGraphic}
+              labels={formData?.data?.map((d) => d?.name)}
+              values={formData?.data?.map((d) => d?.value)}
+              title={`${typeDataToShow
+                ?.find((t) => t?.value === formData?.typeData)
+                ?.label?.toString()
+                ?.slice(0, 25)}...`}
+            />
+          </div>
+        ) : states?.fetchingData ? (
+          <div className="w-full h-full flex justify-center items-center py-60">
+            <div className="spinner"></div>
+          </div>
+        ) : !formData?.data ? (
+          <p className="text-center flex text-xl justify-center items-center w-full">
+            Oops! No hay datos para mostrar.
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 };

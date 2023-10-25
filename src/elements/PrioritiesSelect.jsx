@@ -40,7 +40,7 @@ const PrioritiesSelect = (props) => {
   return (
     <div className="container_priorities-select w-full mt-2">
       <p className="my-0">Seleccione la prioridad *</p>
-      <div className="list-priorities w-full flex items-center gap-4 mt-1 mb-4">
+      <div className={`list-priorities w-full flex items-center gap-4 mt-1 mb-4 ${!props?.isModal ? 'md:flex-col' : ''}`}>
         {props?.priorityOptions?.length
           ? props?.priorityOptions?.map((option, index) => (
               <button
@@ -65,7 +65,7 @@ const PrioritiesSelect = (props) => {
                             ? `text-slate-800`
                             : `text-slate-400`
                         }
-                        w-1/3 md:w-fit md:px-16 text-center font-semibold hover:text-slate-800 rounded-md py-2 px-8 cursor-pointer transition-all
+                        w-1/3 md:w-full md:px-16 text-center font-semibold hover:text-slate-800 rounded-md py-2 px-8 cursor-pointer transition-all
                         `
                   ?.toString()
                   ?.trim()}
